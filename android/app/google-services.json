@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "921231553870",
+    "project_id": "pokerprosuite",
+    "storage_bucket": "pokerprosuite.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921231553870:android:304d54704aa34a728a1a1f",
+        "android_client_info": {
+          "package_name": "com.app.pokerprosuite"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKd9tNN6p6YkECJi2RT_eWgA9vGkrnkoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
