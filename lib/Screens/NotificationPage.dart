@@ -113,17 +113,17 @@ class _NotificationPageState extends State<NotificationPage> {
                               width: ScreenUtil().setWidth(235),
                               alignment: Alignment.topLeft,
                               child: Text(
-                                   "ABC",
+                                   "Falak Shah",
                                   style: TextStyle(
                                       fontSize: ScreenUtil().setWidth(15),
-                                      color: appColor,
+                                      color: primaryColor,
                                       fontFamily: 'poppins',
-                                      fontWeight: FontWeight.w600)),
+                                      fontWeight: FontWeight.w400)),
                             ),
                           ],
                         ),
                         SizedBox(
-                          height: ScreenUtil().setHeight(5),
+                          height: ScreenUtil().setHeight(10),
                         ),
                         Container(
                           width: ScreenUtil().setWidth(235),
@@ -131,30 +131,42 @@ class _NotificationPageState extends State<NotificationPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                width: ScreenUtil().setWidth(115),
+                                width: ScreenUtil().setWidth(100),
                                 decoration: BoxDecoration(
                                   color: appColor,
                                   borderRadius: BorderRadius.circular(15)
                                 ),
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                     "Accept",
-                                    style: TextStyle(
-                                        fontSize: ScreenUtil().setWidth(12),
-                                        color: appColor,
-                                        fontFamily: 'poppins',
-                                        fontWeight: FontWeight.w600)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                         "Accept",
+                                        style: TextStyle(
+                                            fontSize: ScreenUtil().setWidth(12),
+                                            color: secondaryColor,
+                                            fontFamily: 'poppins',
+                                            fontWeight: FontWeight.w600)),
+                                  ),
+                                ),
                               ),
                               Container(
-                                width: ScreenUtil().setWidth(115),
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                    "Reject",
-                                    style: TextStyle(
-                                        fontSize: ScreenUtil().setWidth(12),
-                                        color: appColor,
-                                        fontFamily: 'poppins',
-                                        fontWeight: FontWeight.w600)),
+                                width: ScreenUtil().setWidth(100),
+                                decoration: BoxDecoration(
+                                    color: appColor,
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                        "Reject",
+                                        style: TextStyle(
+                                            fontSize: ScreenUtil().setWidth(12),
+                                            color: secondaryColor,
+                                            fontFamily: 'poppins',
+                                            fontWeight: FontWeight.w600)),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
