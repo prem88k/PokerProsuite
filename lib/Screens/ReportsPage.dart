@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:poker_income/Model/GetSessionReportData.dart';
 import '../Constants/Colors.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+import '../Constants/Api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({Key? key}) : super(key: key);
@@ -12,6 +17,19 @@ class ReportsPage extends StatefulWidget {
 class _ReportsPageState extends State<ReportsPage> {
 
   int? selectedIndex;
+  bool isloading = false;
+  SharedPreferences ?prefs;
+  late GetSessionReportData getSessionReportData;
+  List<All>? allList = [];
+  List<Monthly>? monthlyList = [];
+  List<Yearly>? yearlyList = [];
+  List<Weekly>? weeklyList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getReportList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,13 +192,13 @@ class _ReportsPageState extends State<ReportsPage> {
                   child: Column(
                       children: <Widget>[
                         selectedIndex == 0 ?
-                        _buildServiceList() :
+                        OverallWidget() :
                         selectedIndex == 1 ?
-                        _buildweekList() :
+                        WeeklyWidget() :
                         selectedIndex == 2 ?
-                        _buildmonthList() :
+                        MonthlyWidget() :
                         selectedIndex == 3 ?
-                        _buildyearList() : Container()
+                        YearlyWidget() : Container()
                       ]),
                 ),
               )
@@ -191,8 +209,139 @@ class _ReportsPageState extends State<ReportsPage> {
     );
   }
 
-  Widget _buildServiceList() {
+  OverallWidget() {
     return Container(
+      padding: EdgeInsets.only(
+        top: ScreenUtil().setHeight(10.0),
+        bottom: ScreenUtil().setHeight(10.0),
+      ),
+      child: allList!.length == 0
+          ? Center(
+        child: Text(
+          "No Data Found",
+          style: TextStyle(
+            color: appColor,
+            fontSize: ScreenUtil().setHeight(12),
+            fontFamily: 'poppins',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      )
+          :  ListView.builder(
+        itemCount: allList!.length,
+        physics: NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, i) {
+          return _buildAllList(i);
+        },
+      ),
+    );
+  }
+
+  WeeklyWidget() {
+    return Container(
+      padding: EdgeInsets.only(
+        top: ScreenUtil().setHeight(10.0),
+        bottom: ScreenUtil().setHeight(10.0),
+      ),
+      child: weeklyList!.length == 0
+          ? Center(
+        child: Text(
+          "No Data Found",
+          style: TextStyle(
+            color: appColor,
+            fontSize: ScreenUtil().setHeight(12),
+            fontFamily: 'poppins',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      )
+          :  ListView.builder(
+        itemCount: weeklyList!.length,
+        physics: NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, i) {
+          return _buildweekList(i);
+        },
+      ),
+    );
+  }
+
+  MonthlyWidget() {
+    return Container(
+      padding: EdgeInsets.only(
+        top: ScreenUtil().setHeight(10.0),
+        bottom: ScreenUtil().setHeight(10.0),
+      ),
+      child: monthlyList!.length == 0
+          ? Center(
+        child: Text(
+          "No Data Found",
+          style: TextStyle(
+            color: appColor,
+            fontSize: ScreenUtil().setHeight(12),
+            fontFamily: 'poppins',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      )
+          :  ListView.builder(
+        itemCount: monthlyList!.length,
+        physics: NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, i) {
+          return _buildmonthList(i);
+        },
+      ),
+    );
+  }
+
+  YearlyWidget() {
+    return Container(
+      padding: EdgeInsets.only(
+        top: ScreenUtil().setHeight(10.0),
+        bottom: ScreenUtil().setHeight(10.0),
+      ),
+      child: yearlyList!.length == 0
+          ? Center(
+        child: Text(
+          "No Data Found",
+          style: TextStyle(
+            color: appColor,
+            fontSize: ScreenUtil().setHeight(12),
+            fontFamily: 'poppins',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      )
+          :  ListView.builder(
+        itemCount: yearlyList!.length,
+        physics: NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, i) {
+          return _buildyearList(i);
+        },
+      ),
+    );
+  }
+
+
+  Widget _buildAllList(int i) {
+    return Container(
+      margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(10.0)),
+      padding: EdgeInsets.only(
+        left: ScreenUtil().setWidth(10.0),
+        right: ScreenUtil().setWidth(10.0),
+        top: ScreenUtil().setHeight(10.0),
+        bottom: ScreenUtil().setHeight(10.0),
+      ),
+      decoration: BoxDecoration(
+          border: Border.all(color: appColor, width: 0.2),
+          borderRadius: BorderRadius.circular(15), color: secondaryColor),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,14 +350,6 @@ class _ReportsPageState extends State<ReportsPage> {
           padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10), top: ScreenUtil().setHeight(10)),
           child: GestureDetector(
             onTap: () {
-              /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
             },
             child: Container(
               child: Column(
@@ -218,7 +359,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     children: [
                       Container(
                         child: Text(
-                          'Profit/Loss',
+                          'Cash In',
                           style: TextStyle(
                             color: primaryColor,
                             fontSize: ScreenUtil().setWidth(14),
@@ -231,8 +372,7 @@ class _ReportsPageState extends State<ReportsPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            child: Text(
-                              '₹ 0:00',
+                            child: Text( allList![i].cashIn.toString(),
                               style: TextStyle(
                                 color: primaryColor,
                                 fontSize: ScreenUtil().setWidth(14),
@@ -261,14 +401,6 @@ class _ReportsPageState extends State<ReportsPage> {
           padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
           child: GestureDetector(
             onTap: () {
-              /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
             },
             child: Container(
               child: Column(
@@ -278,7 +410,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     children: [
                       Container(
                         child: Text(
-                          '₹/Hour',
+                          'Hour',
                           style: TextStyle(
                             color: primaryColor,
                             fontSize: ScreenUtil().setWidth(14),
@@ -292,7 +424,7 @@ class _ReportsPageState extends State<ReportsPage> {
                         children: [
                           Container(
                             child: Text(
-                              '₹ 0:00',
+                              allList![i].time.toString(),
                               style: TextStyle(
                                 color: primaryColor,
                                 fontSize: ScreenUtil().setWidth(14),
@@ -321,14 +453,6 @@ class _ReportsPageState extends State<ReportsPage> {
           padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
           child: GestureDetector(
             onTap: () {
-              /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
             },
             child: Container(
               child: Column(
@@ -338,7 +462,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     children: [
                       Container(
                         child: Text(
-                          '₹/Session',
+                          'Cash Out',
                           style: TextStyle(
                             color: primaryColor,
                             fontSize: ScreenUtil().setWidth(14),
@@ -352,7 +476,7 @@ class _ReportsPageState extends State<ReportsPage> {
                         children: [
                           Container(
                             child: Text(
-                              '₹ 0:00',
+                              allList![i].cashOut.toString(),
                               style: TextStyle(
                                 color: primaryColor,
                                 fontSize: ScreenUtil().setWidth(14),
@@ -381,14 +505,7 @@ class _ReportsPageState extends State<ReportsPage> {
           padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
           child: GestureDetector(
             onTap: () {
-              /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
+
             },
             child: Container(
               child: Column(
@@ -398,7 +515,7 @@ class _ReportsPageState extends State<ReportsPage> {
                     children: [
                       Container(
                         child: Text(
-                          'Duration',
+                          'Date',
                           style: TextStyle(
                             color: primaryColor,
                             fontSize: ScreenUtil().setWidth(14),
@@ -412,187 +529,7 @@ class _ReportsPageState extends State<ReportsPage> {
                         children: [
                           Container(
                             child: Text(
-                              '64 hour(s) 0 minute(s)',
-                              style: TextStyle(
-                                color: primaryColor,
-                                fontSize: ScreenUtil().setWidth(14),
-                                fontFamily: 'poppins',
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: ScreenUtil().setWidth(5),),
-                          Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(5),),
-                  Divider(
-                    thickness: 0.5,
-                    color: lightTextColor,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
-          child: GestureDetector(
-            onTap: () {
-              /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
-            },
-            child: Container(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          'Cashed',
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontSize: ScreenUtil().setWidth(14),
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Text(
-                              '0/8 (0%)',
-                              style: TextStyle(
-                                color: primaryColor,
-                                fontSize: ScreenUtil().setWidth(14),
-                                fontFamily: 'poppins',
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: ScreenUtil().setWidth(5),),
-                          Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(5),),
-                  Divider(
-                    thickness: 0.5,
-                    color: lightTextColor,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
-          child: GestureDetector(
-            onTap: () {
-              /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
-            },
-            child: Container(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          'Tips/Meals',
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontSize: ScreenUtil().setWidth(14),
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Text(
-                              '₹ 0:00',
-                              style: TextStyle(
-                                color: primaryColor,
-                                fontSize: ScreenUtil().setWidth(14),
-                                fontFamily: 'poppins',
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: ScreenUtil().setWidth(5),),
-                          Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(5),),
-                  Divider(
-                    thickness: 0.5,
-                    color: lightTextColor,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
-          child: GestureDetector(
-            onTap: () {
-              /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
-            },
-            child: Container(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          'Bankroll',
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontSize: ScreenUtil().setWidth(14),
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Text(
-                              '₹ 0:00',
+                              allList![i].date.toString(),
                               style: TextStyle(
                                 color: primaryColor,
                                 fontSize: ScreenUtil().setWidth(14),
@@ -622,64 +559,26 @@ class _ReportsPageState extends State<ReportsPage> {
     );
   }
 
-  Widget _buildweekList() {
+  Widget _buildweekList(int i) {
     return Container(
+      margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(10.0)),
+      padding: EdgeInsets.only(
+        left: ScreenUtil().setWidth(10.0),
+        right: ScreenUtil().setWidth(10.0),
+        top: ScreenUtil().setHeight(10.0),
+        bottom: ScreenUtil().setHeight(10.0),
+      ),
+      decoration: BoxDecoration(
+          border: Border.all(color: appColor, width: 0.2),
+          borderRadius: BorderRadius.circular(15), color: secondaryColor),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            color: boxBackgroundColor,
-            child: Padding(
-              padding: const EdgeInsets.only(top:5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    child: Text(
-                      'Days',
-                      style: TextStyle(
-                        color: primaryColor,
-                        fontSize: ScreenUtil().setWidth(14),
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Text(
-                          '₹/Hour',
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontSize: ScreenUtil().setWidth(14),
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                     /* SizedBox(width: ScreenUtil().setWidth(5),),
-                      Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)*/
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
           Padding(
-            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10), top: ScreenUtil().setHeight(20)),
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10), top: ScreenUtil().setHeight(10)),
             child: GestureDetector(
               onTap: () {
-                /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
               },
               child: Container(
                 child: Column(
@@ -689,7 +588,7 @@ class _ReportsPageState extends State<ReportsPage> {
                       children: [
                         Container(
                           child: Text(
-                            'Monday',
+                            'Cash In',
                             style: TextStyle(
                               color: primaryColor,
                               fontSize: ScreenUtil().setWidth(14),
@@ -702,8 +601,7 @@ class _ReportsPageState extends State<ReportsPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              child: Text(
-                                '16 Hours',
+                              child: Text( weeklyList![i].cashIn.toString(),
                                 style: TextStyle(
                                   color: primaryColor,
                                   fontSize: ScreenUtil().setWidth(14),
@@ -712,6 +610,8 @@ class _ReportsPageState extends State<ReportsPage> {
                                 ),
                               ),
                             ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
                           ],
                         )
                       ],
@@ -730,14 +630,6 @@ class _ReportsPageState extends State<ReportsPage> {
             padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
             child: GestureDetector(
               onTap: () {
-                /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
               },
               child: Container(
                 child: Column(
@@ -747,7 +639,7 @@ class _ReportsPageState extends State<ReportsPage> {
                       children: [
                         Container(
                           child: Text(
-                            'Tuesday',
+                            'Hour',
                             style: TextStyle(
                               color: primaryColor,
                               fontSize: ScreenUtil().setWidth(14),
@@ -761,7 +653,7 @@ class _ReportsPageState extends State<ReportsPage> {
                           children: [
                             Container(
                               child: Text(
-                                '12 Hours',
+                                weeklyList![i].time.toString(),
                                 style: TextStyle(
                                   color: primaryColor,
                                   fontSize: ScreenUtil().setWidth(14),
@@ -770,6 +662,8 @@ class _ReportsPageState extends State<ReportsPage> {
                                 ),
                               ),
                             ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
                           ],
                         )
                       ],
@@ -784,70 +678,10 @@ class _ReportsPageState extends State<ReportsPage> {
               ),
             ),
           ),
-
-        ],
-      ),
-    );
-  }
-
-  Widget _buildmonthList() {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            color: boxBackgroundColor,
-            child: Padding(
-              padding: const EdgeInsets.only(top:5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    child: Text(
-                      'Month',
-                      style: TextStyle(
-                        color: primaryColor,
-                        fontSize: ScreenUtil().setWidth(14),
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Text(
-                          '₹/Hour',
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontSize: ScreenUtil().setWidth(14),
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                      /* SizedBox(width: ScreenUtil().setWidth(5),),
-                      Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)*/
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
           Padding(
-            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10), top: ScreenUtil().setHeight(20)),
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
             child: GestureDetector(
               onTap: () {
-                /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
               },
               child: Container(
                 child: Column(
@@ -857,7 +691,7 @@ class _ReportsPageState extends State<ReportsPage> {
                       children: [
                         Container(
                           child: Text(
-                            'March',
+                            'Cash Out',
                             style: TextStyle(
                               color: primaryColor,
                               fontSize: ScreenUtil().setWidth(14),
@@ -871,7 +705,7 @@ class _ReportsPageState extends State<ReportsPage> {
                           children: [
                             Container(
                               child: Text(
-                                '16 Hours',
+                                weeklyList![i].cashOut.toString(),
                                 style: TextStyle(
                                   color: primaryColor,
                                   fontSize: ScreenUtil().setWidth(14),
@@ -880,6 +714,61 @@ class _ReportsPageState extends State<ReportsPage> {
                                 ),
                               ),
                             ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Date',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text(
+                                weeklyList![i].date.toString(),
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
                           ],
                         )
                       ],
@@ -899,64 +788,26 @@ class _ReportsPageState extends State<ReportsPage> {
     );
   }
 
-  Widget _buildyearList() {
+  Widget _buildmonthList(int i) {
     return Container(
+      margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(10.0)),
+      padding: EdgeInsets.only(
+        left: ScreenUtil().setWidth(10.0),
+        right: ScreenUtil().setWidth(10.0),
+        top: ScreenUtil().setHeight(10.0),
+        bottom: ScreenUtil().setHeight(10.0),
+      ),
+      decoration: BoxDecoration(
+          border: Border.all(color: appColor, width: 0.2),
+          borderRadius: BorderRadius.circular(15), color: secondaryColor),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            color: boxBackgroundColor,
-            child: Padding(
-              padding: const EdgeInsets.only(top:5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    child: Text(
-                      'Year',
-                      style: TextStyle(
-                        color: primaryColor,
-                        fontSize: ScreenUtil().setWidth(14),
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Text(
-                          '₹/Hour',
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontSize: ScreenUtil().setWidth(14),
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                      /* SizedBox(width: ScreenUtil().setWidth(5),),
-                      Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)*/
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
           Padding(
-            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10), top: ScreenUtil().setHeight(20)),
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10), top: ScreenUtil().setHeight(10)),
             child: GestureDetector(
               onTap: () {
-                /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CompletedSessionPage();
-                        },
-                      ),
-                    );*/
               },
               child: Container(
                 child: Column(
@@ -966,7 +817,58 @@ class _ReportsPageState extends State<ReportsPage> {
                       children: [
                         Container(
                           child: Text(
-                            '2023-2024',
+                            'Cash In',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text( monthlyList![i].cashIn.toString(),
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Hour',
                             style: TextStyle(
                               color: primaryColor,
                               fontSize: ScreenUtil().setWidth(14),
@@ -980,7 +882,7 @@ class _ReportsPageState extends State<ReportsPage> {
                           children: [
                             Container(
                               child: Text(
-                                '16 Hours',
+                                monthlyList![i].time.toString(),
                                 style: TextStyle(
                                   color: primaryColor,
                                   fontSize: ScreenUtil().setWidth(14),
@@ -989,6 +891,113 @@ class _ReportsPageState extends State<ReportsPage> {
                                 ),
                               ),
                             ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Cash Out',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text(
+                                monthlyList![i].cashOut.toString(),
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Date',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text(
+                                monthlyList![i].date.toString(),
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
                           ],
                         )
                       ],
@@ -1006,5 +1015,283 @@ class _ReportsPageState extends State<ReportsPage> {
         ],
       ),
     );
+  }
+
+  Widget _buildyearList(int i) {
+    return Container(
+      margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(10.0)),
+      padding: EdgeInsets.only(
+        left: ScreenUtil().setWidth(10.0),
+        right: ScreenUtil().setWidth(10.0),
+        top: ScreenUtil().setHeight(10.0),
+        bottom: ScreenUtil().setHeight(10.0),
+      ),
+      decoration: BoxDecoration(
+          border: Border.all(color: appColor, width: 0.2),
+          borderRadius: BorderRadius.circular(15), color: secondaryColor),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10), top: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Cash In',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text( yearlyList![i].cashIn.toString(),
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Hour',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text(
+                                yearlyList![i].time.toString(),
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Cash Out',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text(
+                                yearlyList![i].cashOut.toString(),
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Date',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text(
+                                yearlyList![i].date.toString(),
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> getReportList() async {
+    prefs = await SharedPreferences.getInstance();
+    //print((int.parse(bidValueController.text)*100)/int.parse(contestPrice));
+    setState(() {
+      isloading = true;
+    });
+    var uri = Uri.https(
+      apiBaseUrl,
+      '/api/getsessionreports',
+    );
+
+    print('${prefs!.getString('token')}');
+
+    final encoding = Encoding.getByName('utf-8');
+
+    final headers = {'Authorization': 'Bearer ${prefs!.getString('token')}'};
+
+    Response response = await get(
+      uri,
+      headers: headers,
+    );
+
+    var getdata = json.decode(response.body);
+    String responseBody = response.body;
+    int statusCode = response.statusCode;
+    print(getdata["success"]);
+    print("My Session Report Response::$responseBody");
+    if (statusCode == 200) {
+      if (getdata["success"]) {
+        getSessionReportData = GetSessionReportData.fromJson(jsonDecode(responseBody));
+        allList!.addAll(getSessionReportData.all!);
+        weeklyList!.addAll(getSessionReportData.weekly!);
+        monthlyList!.addAll(getSessionReportData.monthly!);
+        yearlyList!.addAll(getSessionReportData.yearly!);
+        setState(() {
+          isloading = false;
+        });
+      } else {
+        setState(() {
+          isloading = false;
+        });
+      }
+    } else {
+      setState(() {
+        isloading = false;
+      });
+    }
   }
 }

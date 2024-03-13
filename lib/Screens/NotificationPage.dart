@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:poker_income/Model/GetNotificationData.dart';
 import '../Constants/Colors.dart';
 import '../Constants/Api.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:http/http.dart';
+import 'dart:convert';
+import '../Constants/Api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Registration/view.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -17,6 +24,18 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+
+  bool isloading = false;
+  SharedPreferences ?prefs;
+  late GetNotificationData getNotificationData;
+  List<NotificationList>? notificationList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getNotificationList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,10 +68,10 @@ class _NotificationPageState extends State<NotificationPage> {
                 height: ScreenUtil().setHeight(15),
               ),
 
-              /*gamesList!.length == 0 ?
+              notificationList!.length == 0 ?
               Center(
                 child: Text(
-                  "My Games Not Found",
+                  "Notification Data Not Found",
                   style: TextStyle(
                     color: appColor,
                     fontSize: ScreenUtil().setHeight(12),
@@ -60,8 +79,8 @@ class _NotificationPageState extends State<NotificationPage> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-              ):*/ ListView.builder(
-                itemCount: 2,
+              ): ListView.builder(
+                itemCount: notificationList!.length,
                 primary: false,
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -75,6 +94,7 @@ class _NotificationPageState extends State<NotificationPage> {
       ),
     );
   }
+
   Widget _buildServiceList(int i) {
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
@@ -113,7 +133,7 @@ class _NotificationPageState extends State<NotificationPage> {
                               width: ScreenUtil().setWidth(235),
                               alignment: Alignment.topLeft,
                               child: Text(
-                                   "Falak Shah",
+                                   notificationList![i].message.toString(),
                                   style: TextStyle(
                                       fontSize: ScreenUtil().setWidth(15),
                                       color: primaryColor,
@@ -122,55 +142,69 @@ class _NotificationPageState extends State<NotificationPage> {
                             ),
                           ],
                         ),
+
                         SizedBox(
                           height: ScreenUtil().setHeight(10),
                         ),
+
+                        notificationList![i].status == "0" || notificationList![i].status == "1" ?
                         Container(
                           width: ScreenUtil().setWidth(235),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                width: ScreenUtil().setWidth(100),
-                                decoration: BoxDecoration(
-                                  color: appColor,
-                                  borderRadius: BorderRadius.circular(15)
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                         "Accept",
-                                        style: TextStyle(
-                                            fontSize: ScreenUtil().setWidth(12),
-                                            color: secondaryColor,
-                                            fontFamily: 'poppins',
-                                            fontWeight: FontWeight.w600)),
+                              GestureDetector(
+                                onTap: () {
+                                  requestAPI(notificationList![i].userId, notificationList![i].gameId, "0");
+                                },
+                                child: Container(
+                                  width: ScreenUtil().setWidth(100),
+                                  decoration: BoxDecoration(
+                                    color: appColor,
+                                    borderRadius: BorderRadius.circular(15)
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                           "Accept",
+                                          style: TextStyle(
+                                              fontSize: ScreenUtil().setWidth(12),
+                                              color: secondaryColor,
+                                              fontFamily: 'poppins',
+                                              fontWeight: FontWeight.w600)),
+                                    ),
                                   ),
                                 ),
                               ),
-                              Container(
-                                width: ScreenUtil().setWidth(100),
-                                decoration: BoxDecoration(
-                                    color: appColor,
-                                    borderRadius: BorderRadius.circular(15)
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                        "Reject",
-                                        style: TextStyle(
-                                            fontSize: ScreenUtil().setWidth(12),
-                                            color: secondaryColor,
-                                            fontFamily: 'poppins',
-                                            fontWeight: FontWeight.w600)),
+                              GestureDetector(
+                                onTap: () {
+                                  requestAPI(notificationList![i].userId, notificationList![i].gameId, "1");
+                                },
+                                child: Container(
+                                  width: ScreenUtil().setWidth(100),
+                                  decoration: BoxDecoration(
+                                      color: appColor,
+                                      borderRadius: BorderRadius.circular(15)
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                          "Reject",
+                                          style: TextStyle(
+                                              fontSize: ScreenUtil().setWidth(12),
+                                              color: secondaryColor,
+                                              fontFamily: 'poppins',
+                                              fontWeight: FontWeight.w600)),
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
+                        ) : Container(),
+
                         SizedBox(
                           height: ScreenUtil().setHeight(10),
                         ),
@@ -184,5 +218,97 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
       ),
     );
+  }
+
+  Future<void> getNotificationList() async {
+    prefs = await SharedPreferences.getInstance();
+    //print((int.parse(bidValueController.text)*100)/int.parse(contestPrice));
+    setState(() {
+      isloading = true;
+    });
+    var uri = Uri.https(
+      apiBaseUrl,
+      '/api/getnotification',
+    );
+
+    print('${prefs!.getString('token')}');
+
+    final encoding = Encoding.getByName('utf-8');
+
+    final headers = {'Authorization': 'Bearer ${prefs!.getString('token')}'};
+
+    Response response = await get(
+      uri,
+      headers: headers,
+    );
+
+    var getdata = json.decode(response.body);
+    String responseBody = response.body;
+    int statusCode = response.statusCode;
+    print(getdata["success"]);
+    print("Get Notification Response::$responseBody");
+    if (statusCode == 200) {
+      if (getdata["success"]) {
+        getNotificationData = GetNotificationData.fromJson(jsonDecode(responseBody));
+        notificationList!.addAll(getNotificationData.data!);
+        setState(() {
+          isloading = false;
+        });
+      } else {
+        setState(() {
+          isloading = false;
+        });
+      }
+    } else {
+      setState(() {
+        isloading = false;
+      });
+    }
+  }
+
+  Future<void> requestAPI(int? id, int? catId, String status) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var uri = Uri.https(
+      apiBaseUrl,
+      '/api/gamestatuschange',
+    );
+    final headers = {
+      'Authorization': 'Bearer ${prefs.getString('access_token')}'
+    };
+    print("${id}, ${catId}, ${status}");
+    Map<String, dynamic> body = {
+      'user_id': id.toString(),
+      'game_id': catId.toString(),
+      'status': status.toString()
+    };
+
+    final encoding = Encoding.getByName('utf-8');
+
+    Response response = await post(
+      uri,
+      headers: headers,
+      body: body,
+      encoding: encoding,
+    );
+
+    var getdata = json.decode(response.body);
+
+    int statusCode = response.statusCode;
+    String responseBody = response.body;
+    print("Request Response ::$responseBody");
+    if (statusCode == 200) {
+      if (getdata["status"]) {
+      } else {
+        setState(() {
+          isloading = false;
+        });
+        Message(context, getdata["message"]);
+      }
+    } else {
+      setState(() {
+        isloading = false;
+      });
+      Message(context, getdata["message"]);
+    }
   }
 }

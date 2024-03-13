@@ -10,7 +10,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-
 import '../Presentation/common_button.dart';
 import 'BottomNavigationBar.dart';
 import 'Registration/view.dart';

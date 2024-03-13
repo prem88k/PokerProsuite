@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:poker_income/Screens/BottomNavigationBar.dart';
+import 'package:poker_income/Screens/Login/view.dart';
 import 'Screens/Splashscreen/view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -67,7 +68,7 @@ class MyApp extends StatelessWidget {
             return BottomNavigationBarScreen();
           } else {
             // User is not authenticated, show the login or signup screen
-            return SplashScreen();
+            return LoginPage();
           }
         },
      /* builder: (ctx, userSnapshot) {
@@ -82,7 +83,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 class Firestore {
   static var instance;
 }

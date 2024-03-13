@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:poker_income/Screens/Login/view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../Constants/Colors.dart';
 import '../BottomNavigationBar.dart';
 import '../IntroductionScreen/view.dart';
 
@@ -69,12 +71,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               fit: BoxFit.cover,
             ),
           ),
-          /*child: new BackdropFilter(
+          child: new BackdropFilter(
             filter: new ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
             child: new Container(
               decoration: new BoxDecoration(color: Colors.black.withOpacity(0.0)),
             ),
-          ),*/
+          ),
         ),
 
         Scaffold(
@@ -103,13 +105,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                             ),
                           ),*/
                           SizedBox(height: size.height*0.035,),
-                        /*  Container(
+                          Container(
                               margin: EdgeInsets.only(left: size.height*0.16,right:size.height*0.16),
                               child: LinearProgressIndicator(
                                 value: animation!.value,
                                 color: secondaryColor,
                                 backgroundColor: appColor,
-                              )),*/
+                              )),
                         ],
                       ),
                     ),
@@ -136,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         context,
         MaterialPageRoute(
           builder: (context) {
-            return IntroductionScreen();
+            return LoginPage();
           },
         ),
       );
