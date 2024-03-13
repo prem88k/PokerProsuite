@@ -1,11 +1,11 @@
 class SendNotificationModel{
-  String id;
-  String roomId;
-  String title;
-  String body;
-  String fcmToken;
-  bool isGroup;
-  List<String> fcmTokens;
+  String ?id;
+  String? roomId;
+  String? title;
+  String? body;
+  String? fcmToken;
+  bool? isGroup;
+  List<String>? fcmTokens;
 
   SendNotificationModel({
     this.roomId,

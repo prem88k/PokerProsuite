@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:planty_connect/model/ContactList.dart';
-import 'package:planty_connect/model/user_model.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/color_res.dart';
-import 'package:planty_connect/utils/styles.dart';
+import 'package:poker_income/model/user_model.dart';
+import 'package:poker_income/utils/app.dart';
+import 'package:poker_income/utils/color_res.dart';
+import 'package:poker_income/utils/styles.dart';
 
 class UserCard extends StatelessWidget {
   final Function(CategoryData) onTap;

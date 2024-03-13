@@ -24,7 +24,7 @@ void handleException(exception) {
     } else {
       Get.snackbar(
         "Failed",
-        exception.message,
+        exception.message!,
         duration: Duration(seconds: 5),
         backgroundColor: ColorRes.red,
         colorText: ColorRes.white,
@@ -42,7 +42,7 @@ void handleException(exception) {
           ? "Can not find account with this email"
           : exception.code == "wrong-password"
               ? "The password is invalid"
-              : exception.message,
+              : exception.message!,
       duration: Duration(seconds: 5),
       backgroundColor: ColorRes.red,
       colorText: ColorRes.white,

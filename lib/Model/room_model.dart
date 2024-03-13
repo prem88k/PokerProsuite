@@ -4,18 +4,18 @@ import 'package:poker_income/Model/user_model.dart';
 import 'group_model.dart';
 
 class RoomModel {
-  String id;
-  String lastMessage;
-  List<String> membersId;
-  List<String> membersName;
-  String memberImage;
-  String senderImage;
-  String createdBy;
-  String fcmToken;
-  DateTime lastMessageTime;
-  bool isGroup;
-  GroupModel groupModel;
-  UserModel userModel;
+  String? id;
+  String ?lastMessage;
+  List<String> ?membersId;
+  List<String>? membersName;
+  String ?memberImage;
+  String? senderImage;
+  String ?createdBy;
+  String ?fcmToken;
+  DateTime ?lastMessageTime;
+  bool ?isGroup;
+  GroupModel? groupModel;
+  UserModel ?userModel;
 
   RoomModel(
       {this.id,

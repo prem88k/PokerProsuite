@@ -4,16 +4,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:planty_connect/model/ContactList.dart';
-import 'package:planty_connect/model/user_model.dart';
-import 'package:planty_connect/screen/group/new_group/add_description/add_description_view_model.dart';
-import 'package:planty_connect/screen/group/new_group/add_description/widgets/description_area.dart';
-import 'package:planty_connect/screen/group/new_group/add_description/widgets/user_card.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/color_res.dart';
-import 'package:planty_connect/utils/styles.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stacked/stacked.dart';
+
+import '../../../utils/app.dart';
+import '../../../utils/color_res.dart';
+import '../../../utils/styles.dart';
+import 'add_description_view_model.dart';
 
 class AddDescription extends StatefulWidget {
   final List<CategoryData> members;
@@ -52,7 +49,7 @@ class _AddDescriptionState extends State<AddDescription> {
                     ? Icons.arrow_back_ios_rounded
                     : Icons.arrow_back_rounded,
                 color: ColorRes.dimGray,
-              ),
+              ), onPressed: () {  },
               //onPressed: () => Get.back(),
             ),
             title: Column(

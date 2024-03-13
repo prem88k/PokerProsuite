@@ -2,23 +2,23 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:planty_connect/model/group_model.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/app_state.dart';
-import 'package:planty_connect/utils/color_res.dart';
-import 'package:planty_connect/utils/styles.dart';
+import 'package:poker_income/model/group_model.dart';
+import 'package:poker_income/utils/app.dart';
+import 'package:poker_income/utils/app_state.dart';
+import 'package:poker_income/utils/color_res.dart';
+import 'package:poker_income/utils/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Header extends StatelessWidget {
-  final VoidCallback onBack;
-  final VoidCallback headerClick;
-  final GroupModel groupModel;
-  final bool isForwardMode;
-  final bool isDeleteMode;
-  final VoidCallback deleteClick;
-  final VoidCallback forwardClick;
-  final VoidCallback clearClick;
-  SharedPreferences prefs;
+  final VoidCallback ?onBack;
+  final VoidCallback? headerClick;
+  final GroupModel? groupModel;
+  final bool? isForwardMode;
+  final bool ?isDeleteMode;
+  final VoidCallback? deleteClick;
+  final VoidCallback? forwardClick;
+  final VoidCallback? clearClick;
+  SharedPreferences ?prefs;
   Header({
     this.onBack,
     this.headerClick,
@@ -41,7 +41,7 @@ class Header extends StatelessWidget {
         height: 60,
         child: Row(
           children: [
-            isDeleteMode || isForwardMode
+            isDeleteMode! || isForwardMode!
                 ? Container(
                     margin: EdgeInsets.symmetric(horizontal: 13),
                     child: InkWell(
@@ -67,7 +67,7 @@ class Header extends StatelessWidget {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  headerClick.call();
+                  headerClick!.call();
                 },
                 child: Container(
                   height: 60,
@@ -79,13 +79,13 @@ class Header extends StatelessWidget {
                         width: 40,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(60),
-                          child: groupModel.groupImage == null
+                          child: groupModel!.groupImage == null
                               ? Icon(
                                   Icons.group,
                                   color: ColorRes.dimGray,
                                 )
                               : FadeInImage(
-                                  image: NetworkImage(groupModel.groupImage),
+                                  image: NetworkImage(groupModel!.groupImage!),
                                   height: 40,
                                   width: 40,
                                   fit: BoxFit.cover,
@@ -97,19 +97,19 @@ class Header extends StatelessWidget {
                       Expanded(
                         child: StreamBuilder<DocumentSnapshot>(
                             stream: chatRoomService
-                                .streamParticularRoom(groupModel.groupId),
+                                .streamParticularRoom(groupModel!.groupId!),
                             builder: (context, snapshot) {
-                              Map<String, dynamic> data = {};
+                              Map<String, dynamic>? data = {};
                               if (snapshot.data != null) {
-                                data = snapshot.data.data();
+                                data = snapshot.data!.data() as Map<String, dynamic>?;
                               }
-                              String typingId = data['typing_id'];
+                              String typingId = data!['typing_id'];
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    groupModel.name,
+                                    groupModel!.name!,
                                     style: AppTextStyle(
                                       color: ColorRes.dimGray,
                                       fontSize: 16,
@@ -118,18 +118,18 @@ class Header extends StatelessWidget {
                                   snapshot.hasData
                                       ? (data['typing_id'] != null &&
                                               data['typing_id'] !=
-                                                  prefs.getString("UserId"))
+                                                  prefs!.getString("UserId")!)
                                           ? StreamBuilder<DocumentSnapshot>(
                                               stream: userService
                                                   .getUserStream(typingId),
                                               builder: (context, snapshot) {
-                                                Map<String, dynamic> data = {};
+                                                Map<String, dynamic>? data = {};
                                                 if (snapshot.data != null) {
-                                                  data = snapshot.data.data();
+                                                  data = snapshot.data!.data() as Map<String, dynamic>?;
                                                 }
                                                 if (snapshot.hasData)
                                                   return Text(
-                                                    "${data['name']} typing...",
+                                                    "${data!['name']} typing...",
                                                     style: AppTextStyle(
                                                       color: ColorRes.green,
                                                       fontSize: 14,
@@ -149,7 +149,7 @@ class Header extends StatelessWidget {
                 ),
               ),
             ),
-            isDeleteMode
+            isDeleteMode!
                 ? IconButton(
                     onPressed: deleteClick,
                     icon: Icon(
@@ -157,7 +157,7 @@ class Header extends StatelessWidget {
                       color: ColorRes.green,
                     ),
                   )
-                : isForwardMode
+                : isForwardMode!
                     ? IconButton(
                         onPressed: forwardClick,
                         icon: Icon(

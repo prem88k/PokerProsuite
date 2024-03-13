@@ -1,12 +1,13 @@
-import 'package:planty_connect/utils/color_res.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'color_res.dart';
 
 // ignore: non_constant_identifier_names
 TextStyle AppTextStyle({
-  FontWeight weight,
-  double fontSize,
-  Color color,
-  TextDecoration decoration,
+  FontWeight? weight,
+  double ?fontSize,
+  Color? color,
+  TextDecoration ?decoration,
 }) {
   return TextStyle(
     fontWeight: weight ?? FontWeight.normal,

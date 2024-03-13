@@ -1,14 +1,14 @@
 class MessageModel {
-  String id;
-  String content;
-  String type;
-  int sendTime;
-  String sender;
-  String senderName;
-  String senderImage;
-  bool isDownloading;
-  String receiver;
-  MMessage mMessage;
+  String? id;
+  String ?content;
+  String ?type;
+  int ?sendTime;
+  String? sender;
+  String ?senderName;
+  String? senderImage;
+  bool? isDownloading;
+  String ?receiver;
+  MMessage ?mMessage;
 
   MessageModel({
     this.id,
@@ -52,10 +52,10 @@ class MessageModel {
 }
 
 class MMessage {
-  Type mType;
-  String mContent;
-  String mDataType;
-  String mSender;
+  Type? mType;
+  String? mContent;
+  String? mDataType;
+  String? mSender;
 
   MMessage({
     this.mType,
@@ -89,8 +89,8 @@ final mTypeValues = EnumValues({
 });
 
 class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String> reverseMap;
+  late Map<String, T> map;
+  late Map<T, String> reverseMap;
 
   EnumValues(this.map);
 

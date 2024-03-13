@@ -4,16 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
-import 'package:planty_connect/provider/ColorsInf.dart';
-import 'package:planty_connect/provider/DarkThemeProvider.dart';
+import 'package:poker_income/provider/ColorsInf.dart';
+import 'package:poker_income/provider/DarkThemeProvider.dart';
 import '/group/chat_screen/chat_screen_view_model.dart';
 import '/group/chat_screen/widget/InputBottomBar.dart';
 import '/group/chat_screen/widget/header.dart';
 import '/group/chat_screen/widget/message_view/message_view.dart';
 import '/group/chat_screen/widget/scroll_down_button.dart';
-import 'package:planty_connect/screen/home/home_screen.dart';
-import 'package:planty_connect/screen/landing/landing_screen.dart';
-import 'package:planty_connect/utils/app.dart';
+import 'package:poker_income/screen/home/home_screen.dart';
+import 'package:poker_income/screen/landing/landing_screen.dart';
+import 'package:poker_income/utils/app.dart';
 import '/utils/app_state.dart';
 import '/utils/color_res.dart';
 import '/utils/common_widgets.dart';
@@ -25,7 +25,7 @@ import '../../../main.dart';
 import '../../Model/group_model.dart';
 import '../../Model/message_model.dart';
 
-AppLifecycleState appLifeState;
+AppLifecycleState? appLifeState;
 
 class ChatScreen extends StatefulWidget {
   final GroupModel groupModel;
@@ -40,9 +40,9 @@ class ChatScreen extends StatefulWidget {
 bool appIsBG = false;
 
 class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
-  SharedPreferences prefs;
-  DarkThemeProvider themeChange;
-  ColorsInf colorsInf;
+  SharedPreferences? prefs;
+  DarkThemeProvider ?themeChange;
+  ColorsInf ?colorsInf;
 
   @override
   void initState() {
@@ -74,7 +74,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       }
     }
     chatRoomService.updateLastMessage(
-      {"${prefs.getString("UserId")}_newMessage": 0},
+      {"${prefs!.getString("UserId")}_newMessage": 0},
       widget.groupModel.groupId,
     );
   }

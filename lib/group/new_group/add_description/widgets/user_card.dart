@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:planty_connect/model/ContactList.dart';
-import 'package:planty_connect/utils/color_res.dart';
-import 'package:planty_connect/utils/styles.dart';
+
+import '../../../../utils/color_res.dart';
+import '../../../../utils/styles.dart';
+
 
 class UserCard extends StatelessWidget {
   CategoryData user;

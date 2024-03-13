@@ -1,16 +1,18 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/color_res.dart';
-import 'package:planty_connect/utils/styles.dart';
+
+import '../../../../utils/app.dart';
+import '../../../../utils/color_res.dart';
+import '../../../../utils/styles.dart';
+
 
 class DescriptionArea extends StatelessWidget {
-  final TextEditingController title;
-  final TextEditingController description;
-  final Function imagePick;
-  final File image;
-  final GlobalKey<FormState> formKey;
+  final TextEditingController? title;
+  final TextEditingController ?description;
+  final Function ?imagePick;
+  final File? image;
+  final GlobalKey<FormState>? formKey;
 
   DescriptionArea({
     @required this.title,
@@ -34,7 +36,7 @@ class DescriptionArea extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    imagePick.call();
+                    imagePick!.call();
                   },
                   child: image == null
                       ? Container(
@@ -57,7 +59,7 @@ class DescriptionArea extends StatelessWidget {
                             height: 50,
                             width: 50,
                             child: Image.file(
-                              image,
+                              image!,
                               height: 50,
                               width: 50,
                               fit: BoxFit.cover,
@@ -73,7 +75,7 @@ class DescriptionArea extends StatelessWidget {
                       hintText: AppRes.type_group_title_here,
                     ),
                     validator: (s) {
-                      if (s.isEmpty) {
+                      if (s!.isEmpty) {
                         return AppRes.can_not_be_empty;
                       } else {
                         return null;

@@ -1,11 +1,11 @@
 class GroupModel{
-  String groupId;
-  String createdBy;
-  String name;
-  String description;
-  String groupImage;
-  List<GroupMember> members;
-  DateTime createdAt;
+  String ?groupId;
+  String? createdBy;
+  String? name;
+  String? description;
+  String ?groupImage;
+  List<GroupMember> ?members;
+  DateTime ?createdAt;
 
   GroupModel({
     this.groupId,
@@ -46,16 +46,16 @@ class GroupModel{
     "createdBy" : createdBy,
     "description" : description,
     "groupImage" : groupImage,
-    "members" : List<dynamic>.from(members.map((x) => x.toMap())),
+    "members" : List<dynamic>.from(members!.map((x) => x.toMap())),
     "createdAt" : createdAt,
   };
 }
 
 class GroupMember{
-  String memberId;
-  String memberName;
-  String memberImage;
-  bool isAdmin;
+  String ?memberId;
+  String ?memberName;
+  String ?memberImage;
+  bool ?isAdmin;
 
   GroupMember({this.memberId, this.isAdmin,this.memberName,this.memberImage});
 

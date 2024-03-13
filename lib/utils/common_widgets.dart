@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:planty_connect/provider/ColorsInf.dart';
 import '/utils/app.dart';
 import '/utils/color_res.dart';
 import '/utils/styles.dart';
@@ -11,14 +10,13 @@ class EvolveButton extends StatelessWidget {
   final VoidCallback onTap;
   final double width;
   final double height;
-  final ColorsInf language;
 
   EvolveButton(
-      {@required this.title,
-      @required this.onTap,
-      this.width,
-      this.height,
-      this.language});
+      {required this.title,
+      required this.onTap,
+      required this.width,
+      required this.height,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +50,11 @@ class TextFieldWidget extends StatelessWidget {
   final bool readOnly;
 
   TextFieldWidget({
-    @required this.controller,
-    @required this.title,
-    @required this.validation,
+    required this.controller,
+    required this.title,
+    required this.validation,
     this.obs = false,
-    @required this.readOnly,
+    required this.readOnly,
   });
 
   @override
@@ -71,7 +69,7 @@ class TextFieldWidget extends StatelessWidget {
         readOnly: readOnly,
         obscureText: obs,
         controller: controller,
-        validator: validation,
+        validator: validation(a),
         keyboardType: title.toLowerCase() == "email"
             ? TextInputType.emailAddress
             : title.toLowerCase() == "password"
@@ -117,11 +115,11 @@ class AttachmentView extends StatelessWidget {
   ColorsInf colorsInf;
 
   AttachmentView(
-      {@required this.onDocumentTap,
-      @required this.onVideoTap,
-      @required this.onGalleryTap,
-      @required this.onAudioTap,
-      @required this.colorsInf});
+      {required this.onDocumentTap,
+      required this.onVideoTap,
+      required this.onGalleryTap,
+      required this.onAudioTap,
+      required this.colorsInf});
 
   @override
   Widget build(BuildContext context) {
@@ -142,22 +140,22 @@ class AttachmentView extends StatelessWidget {
           iconTile(
             text: colorsInf.documentText,
             icon: Icons.insert_drive_file,
-            onTap: onDocumentTap,
+            onTap: onDocumentTap(),
           ),
           iconTile(
             text: colorsInf.videoText,
             icon: Icons.videocam_rounded,
-            onTap: onVideoTap,
+            onTap: onVideoTap(),
           ),
           iconTile(
             text: colorsInf.galleryText,
             icon: Icons.image_rounded,
-            onTap: onGalleryTap,
+            onTap: onGalleryTap(),
           ),
           iconTile(
             text: colorsInf.audioText,
             icon: Icons.headset_mic_rounded,
-            onTap: onAudioTap,
+            onTap: onAudioTap(),
           ),
         ],
       ),
@@ -165,9 +163,9 @@ class AttachmentView extends StatelessWidget {
   }
 
   Widget iconTile({
-    IconData icon,
-    String text,
-    VoidCallback onTap,
+    IconData ?icon,
+    String? text,
+    VoidCallback ?onTap,
   }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -186,7 +184,7 @@ class AttachmentView extends StatelessWidget {
         ),
         verticalSpaceTiny,
         Text(
-          text,
+          text!,
           style: AppTextStyle(
             fontSize: 14.h,
             color: ColorRes.black,

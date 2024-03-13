@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:planty_connect/model/message_model.dart';
-import 'package:planty_connect/screen/group/chat_screen/widget/message_view/alert_message.dart';
-import 'package:planty_connect/screen/group/chat_screen/widget/message_view/document_message.dart';
-import 'package:planty_connect/screen/group/chat_screen/widget/message_view/image_message.dart';
-import 'package:planty_connect/screen/group/chat_screen/widget/message_view/text_message.dart';
-import 'package:planty_connect/utils/app_state.dart';
-import 'package:planty_connect/utils/color_res.dart';
+import 'package:poker_income/Model/message_model.dart';
+import 'package:poker_income/group/chat_screen/widget/message_view/text_message.dart';
+
+import 'package:poker_income/utils/app_state.dart';
+import 'package:poker_income/utils/color_res.dart';
+
+import 'alert_message.dart';
+import 'document_message.dart';
+import 'image_message.dart';
 
 class MessageView extends StatelessWidget {
   final int index;
@@ -17,7 +19,7 @@ class MessageView extends StatelessWidget {
   final List<MessageModel> selectedMessages;
   final bool forwardMode;
   final bool deleteMode;
-  String userId;
+  String? userId;
 
   MessageView(
     this.index,
@@ -59,16 +61,10 @@ class MessageView extends StatelessWidget {
                   message,
                   sender,
                 )
-              : message.type == "photo"
-                  ? ImageMessage(
-                      message,
-                      forwardMode || deleteMode,
-                      sender,
-                    )
-                  : message.type == "alert"
-                      ? AlertMessage(message.content)
+              : message.type == "alert"
+                      ? AlertMessage(message.content!)
                       : DocumentMessage(
-                          message,
+                          message!,
                           downloadDocument,
                           sender,
                           forwardMode || deleteMode,

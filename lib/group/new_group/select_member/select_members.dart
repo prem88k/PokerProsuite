@@ -5,14 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:http/http.dart';
-import 'package:planty_connect/model/ContactList.dart';
-import 'package:planty_connect/screen/group/new_group/select_member/select_members_view_model.dart';
-import 'package:planty_connect/screen/group/new_group/select_member/widgets/user_card.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/color_res.dart';
-import 'package:planty_connect/utils/styles.dart';
+import 'package:poker_income/group/new_group/select_member/select_members_view_model.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stacked/stacked.dart';
+
+import '../../../utils/app.dart';
+import '../../../utils/color_res.dart';
+import '../../../utils/styles.dart';
+import '../../group_details/add_member/widgets/user_card.dart';
 
 class SelectMembers extends StatefulWidget {
   final bool isGroup;
@@ -30,7 +30,7 @@ class _SelectMembersState extends State<SelectMembers> {
   CategoryList categoryList;
   CategoryData user = CategoryData();
   List<CategoryData> categoryDataList = [];
-  Stream streamQuery;
+  Stream? streamQuery;
   final TextEditingController _nameController = TextEditingController();
   var queryResultSet = [];
   var tempSearchStore = [];

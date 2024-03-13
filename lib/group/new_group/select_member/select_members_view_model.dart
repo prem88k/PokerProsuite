@@ -1,24 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
-import 'package:planty_connect/model/ContactList.dart';
-import 'package:planty_connect/model/room_model.dart';
-import 'package:planty_connect/model/send_notification_model.dart';
-import 'package:planty_connect/model/user_model.dart';
-import 'package:planty_connect/screen/broadcast/new_group/add_description/add_description.dart';
-import 'package:planty_connect/screen/group/new_group/add_description/add_description.dart';
-import 'package:planty_connect/screen/group/new_group/add_description/add_description.dart';
-import 'package:planty_connect/screen/home/home_screen.dart';
-import 'package:planty_connect/service/chat_room_service/chat_room_service.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/app_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stacked/stacked.dart';
+
+import '../../../Model/room_model.dart';
+import '../../../Model/user_model.dart';
+import '../../../utils/app.dart';
+import '../add_description/add_description.dart';
 
 class SelectMembersViewModel extends BaseViewModel {
   List<UserModel> users = [];
   List<CategoryData> selectedMembers = [];
-  bool isGroup;
+  bool? isGroup;
 
   init(bool isGroup) async {
     this.isGroup = isGroup;
@@ -47,7 +40,7 @@ class SelectMembersViewModel extends BaseViewModel {
           totalUsers.forEach((element) {
             bool flag = false;
             for (int i = 0; i < filterUserList.length; i++) {
-              if (filterUserList[i].membersId.contains(element.uid)) {
+              if (filterUserList[i].membersId!.contains(element.uid)) {
                 flag = true;
                 break;
               }

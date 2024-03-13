@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:planty_connect/model/message_model.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/color_res.dart';
-import 'package:planty_connect/utils/styles.dart';
+import 'package:poker_income/model/message_model.dart';
+import 'package:poker_income/utils/app.dart';
+import 'package:poker_income/utils/color_res.dart';
+import 'package:poker_income/utils/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ImageMessage extends StatelessWidget {
@@ -54,7 +54,7 @@ class ImageMessage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   child: Image.network(
-                    message.content,
+                    message.content!,
                     width: 200.0.h,
                     height: 200.0.h,
                     fit: BoxFit.cover,
@@ -69,7 +69,7 @@ class ImageMessage extends StatelessWidget {
                               alignment: Alignment.center,
                               children: [
                                 Image.network(
-                                  message.content,
+                                  message.content!,
                                   width: 200.0.h,
                                   height: 200.0.h,
                                   fit: BoxFit.cover,
@@ -85,7 +85,7 @@ class ImageMessage extends StatelessWidget {
                 child: Container(
                   child: Text(
                     hFormat(
-                        DateTime.fromMillisecondsSinceEpoch(message.sendTime)),
+                        DateTime.fromMillisecondsSinceEpoch(message.sendTime!)),
                     style: AppTextStyle(
                       color: ColorRes.white.withOpacity(0.7),
                       fontSize: 12,

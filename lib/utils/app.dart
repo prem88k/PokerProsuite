@@ -7,12 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:planty_connect/service/auth_service/auth_service.dart';
-import 'package:planty_connect/service/chat_room_service/chat_room_service.dart';
-import 'package:planty_connect/service/group_service/group_service.dart';
-import 'package:planty_connect/service/messaging/messaging_service.dart';
-import 'package:planty_connect/service/storage_service/storage_service.dart';
-import 'package:planty_connect/service/user_service/user_service.dart';
+
 import '/utils/color_res.dart';
 import '/utils/exception.dart';
 import '/utils/styles.dart';

@@ -1,14 +1,14 @@
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:open_file/open_file.dart';
-import 'package:planty_connect/model/message_model.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/color_res.dart';
-import 'package:planty_connect/utils/styles.dart';
+
+import '../../../../Model/message_model.dart';
+import '../../../../utils/app.dart';
+import '../../../../utils/color_res.dart';
+import '../../../../utils/styles.dart';
+
 
 class DocumentMessage extends StatefulWidget {
   final MessageModel message;
@@ -50,7 +50,7 @@ class _DocumentMessageState extends State<DocumentMessage> {
                 children: [
                   CircleAvatar(
                     radius: 15.0,
-                    backgroundImage: NetworkImage(widget.message.senderImage),
+                    backgroundImage: NetworkImage(widget.message.senderImage!),
                     backgroundColor: Colors.transparent,
                   ),
                   Container(
@@ -83,35 +83,36 @@ class _DocumentMessageState extends State<DocumentMessage> {
             bottom: 10,
           ),
           height: 70,
+          width: 220.h,
           child: FutureBuilder<FullMetadata>(
             future: storageService.getData(widget.message.content),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                FullMetadata document = snapshot.data;
+                FullMetadata document = snapshot.data!;
                 return Column(
                   children: <Widget>[
                     Expanded(
                       child: FutureBuilder<bool>(
                         future: widget.sender
                             ? checkForSenderExist(
-                                document.name, widget.message.type)
-                            : checkForExist(document.name, widget.message.type),
+                                document.name, widget.message.type!)
+                            : checkForExist(document.name, widget.message.type!),
                         builder: (_, snapshot) {
                           if (snapshot.hasData) {
                             return InkWell(
                               onTap: widget.selectionMode
                                   ? null
                                   : () async {
-                                      if (snapshot.data) {
+                                      if (snapshot.data!) {
                                         String filePath;
                                         if (widget.sender) {
                                           filePath = await getUploadPath(
                                               document.name,
-                                              widget.message.type);
+                                              widget.message.type!);
                                         } else {
                                           filePath = await getDownloadPath(
                                               document.name,
-                                              widget.message.type);
+                                              widget.message.type!);
                                         }
                                         if (filePath != null) {
                                           if (widget.message.type ==
@@ -138,15 +139,15 @@ class _DocumentMessageState extends State<DocumentMessage> {
                                           widget.message.isDownloading = true;
                                         });
                                         await widget.downloadDocument.call(
-                                            widget.message.content,
+                                            widget.message.content!,
                                             widget.sender
                                                 ? await getUploadPath(
                                                     document.name,
-                                                    widget.message.type,
+                                                    widget.message.type!,
                                                   )
                                                 : await getDownloadPath(
                                                     document.name,
-                                                    widget.message.type,
+                                                    widget.message.type!,
                                                   ));
                                         setState(() {
                                           widget.message.isDownloading = false;
@@ -177,7 +178,7 @@ class _DocumentMessageState extends State<DocumentMessage> {
                                         ),
                                       ),
                                     ),
-                                    snapshot.data
+                                    snapshot.data!
                                         ? widget.message.type == 'Recording'
                                             ? GestureDetector(
                                                 onTap: () async {
@@ -197,13 +198,13 @@ class _DocumentMessageState extends State<DocumentMessage> {
                                                             await getUploadPath(
                                                                 document.name,
                                                                 widget.message
-                                                                    .type);
+                                                                    .type!);
                                                       } else {
                                                         filePath =
                                                             await getDownloadPath(
                                                                 document.name,
                                                                 widget.message
-                                                                    .type);
+                                                                    .type!);
                                                       }
                                                       advancedPlayer
                                                           .play(filePath);
@@ -231,7 +232,7 @@ class _DocumentMessageState extends State<DocumentMessage> {
                                                 ),
                                               )
                                             : Container()
-                                        : widget.message.isDownloading
+                                        : widget.message.isDownloading!
                                             ? Container(
                                                 height: 25.h,
                                                 width: 25.h,
@@ -257,7 +258,7 @@ class _DocumentMessageState extends State<DocumentMessage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "${typeEmoji(widget.message.type)} ${convertSize(document.size)}",
+                            "${typeEmoji(widget.message.type!)} ${convertSize(document.size!)}",
                             style: AppTextStyle(
                               color: ColorRes.white.withOpacity(0.7),
                               fontSize: 12,
@@ -265,7 +266,7 @@ class _DocumentMessageState extends State<DocumentMessage> {
                           ),
                           Text(
                             hFormat(DateTime.fromMillisecondsSinceEpoch(
-                                widget.message.sendTime)),
+                                widget.message.sendTime!)),
                             style: AppTextStyle(
                               color: ColorRes.white.withOpacity(0.7),
                               fontSize: 12,
@@ -282,14 +283,13 @@ class _DocumentMessageState extends State<DocumentMessage> {
               }
             },
           ),
-          width: 220.h,
         ),
       ],
     );
   }
 
   // ignore: missing_return
-  String typeEmoji(String type) {
+  String ?typeEmoji(String type) {
     switch (type) {
       case "photo":
         return "📷";

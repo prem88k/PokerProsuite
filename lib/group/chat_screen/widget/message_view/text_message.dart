@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:planty_connect/model/message_model.dart';
-import 'package:planty_connect/screen/group/chat_screen/widget/reply_message.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/color_res.dart';
-import 'package:planty_connect/utils/styles.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../Model/message_model.dart';
+import '../../../../utils/app.dart';
+import '../../../../utils/color_res.dart';
+import '../../../../utils/styles.dart';
+import '../reply_message.dart';
 
 class TextMessage extends StatelessWidget {
   final MessageModel message;
@@ -118,7 +118,7 @@ class TextMessage extends StatelessWidget {
                           SizedBox(width: 8.0),
                           Text(
                             hFormat(DateTime.fromMillisecondsSinceEpoch(
-                                message.sendTime)),
+                                message.sendTime!)),
                             style: AppTextStyle(
                               color: ColorRes.white.withOpacity(0.7),
                               fontSize: 12,
@@ -158,7 +158,7 @@ class TextMessage extends StatelessWidget {
                           child: StreamBuilder<DocumentSnapshot>(
                               stream: userService.getUserStream(message.sender),
                               builder: (context, snapshot) {
-                                Map<String, dynamic> data = {};
+                                Map<String, dynamic>? data = {};
                                 if (snapshot.data != null) {
                                   data = snapshot.data.data();
                                 }

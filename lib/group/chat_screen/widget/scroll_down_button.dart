@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:planty_connect/utils/color_res.dart';
+import 'package:poker_income/utils/color_res.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ScrollDownButton extends StatelessWidget {
-  const ScrollDownButton({Key key, this.onTap}) : super(key: key);
+  const ScrollDownButton({required Key key, this.onTap}) : super(key: key);
 
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

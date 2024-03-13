@@ -4,19 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:planty_connect/model/ContactList.dart';
-import 'package:planty_connect/model/group_model.dart';
-import 'package:planty_connect/model/send_notification_model.dart';
-import 'package:planty_connect/model/user_model.dart';
-import 'package:planty_connect/screen/home/home_screen.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/app_state.dart';
-import 'package:planty_connect/utils/exception.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stacked/stacked.dart';
+
+import '../../../Model/group_model.dart';
+import '../../../utils/app.dart';
+import '../../../utils/exception.dart';
 
 class AddDescriptionViewModel extends BaseViewModel {
-  List<CategoryData> members;
+  List<CategoryData>? members;
 
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
@@ -35,8 +31,8 @@ class AddDescriptionViewModel extends BaseViewModel {
   void doneClick() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Get.focusScope.unfocus();
-    if (formKey.currentState.validate()) {
+    Get.focusScope!.unfocus();
+    if (formKey.currentState!.validate()) {
       setBusy(true);
 
       GroupModel groupModel = GroupModel()..members = [];
@@ -48,7 +44,7 @@ class AddDescriptionViewModel extends BaseViewModel {
       List<String> membersName = [];
 
       members.forEach((element) {
-        groupModel.members.add(GroupMember(
+        groupModel.members!.add(GroupMember(
           memberId: element.userId.toString(),
           memberName: element.username.toString(),
           memberImage: "",
@@ -58,10 +54,10 @@ class AddDescriptionViewModel extends BaseViewModel {
         membersName.add(element.username.toString());
       });
 
-      membersId.add(prefs.getString("UserId"));
-      membersName.add(prefs.getString("Username"));
+      membersId.add(prefs.getString("UserId")!);
+      membersName.add(prefs.getString("Username")!);
 
-      groupModel.members.insert(
+      groupModel.members!.insert(
           0,
           GroupMember(
             memberId:prefs.getString("UserId"),
@@ -124,7 +120,7 @@ class AddDescriptionViewModel extends BaseViewModel {
   }
 
   void imagePick() async {
-    Get.focusScope.unfocus();
+    Get.focusScope!.unfocus();
     try {
       final pickedFile = await picker.getImage(source: ImageSource.gallery);
       if (pickedFile != null) {

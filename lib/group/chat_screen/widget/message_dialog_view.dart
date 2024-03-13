@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:planty_connect/model/message_model.dart';
-import 'package:planty_connect/utils/app.dart';
-import 'package:planty_connect/utils/color_res.dart';
-import 'package:planty_connect/utils/common_widgets.dart';
-import 'package:planty_connect/utils/styles.dart';
+import 'package:poker_income/model/message_model.dart';
+import 'package:poker_income/utils/app.dart';
+import 'package:poker_income/utils/color_res.dart';
+import 'package:poker_income/utils/common_widgets.dart';
+import 'package:poker_income/utils/styles.dart';
 
 class MessageDialog extends StatelessWidget {
-  final bool sender;
-  final Function onReplyTap;
-  final Function onForwardTap;
-  final Function onForwardMultipleTap;
-  final Function onDeleteMultipleTap;
-  final Function onDeleteTap;
-  final MessageModel message;
-  bool value;
+  final bool? sender;
+  final Function? onReplyTap;
+  final Function ?onForwardTap;
+  final Function? onForwardMultipleTap;
+  final Function ?onDeleteMultipleTap;
+  final Function? onDeleteTap;
+  final MessageModel ?message;
+  bool? value;
   MessageDialog( {
     this.sender,
     this.value,
@@ -40,16 +40,16 @@ class MessageDialog extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        cardView(AppRes.reply, onReplyTap),
+        cardView(AppRes.reply, onReplyTap!),
         divider,
-        cardView(AppRes.forward, onForwardTap),
+        cardView(AppRes.forward, onForwardTap!),
         divider,
-        cardView(AppRes.forwardMultiple, onForwardMultipleTap),
-        sender ? divider : Container(),
-        sender ? cardView(AppRes.delete, onDeleteTap) : Container(),
-        sender ? divider : Container(),
-        sender
-            ? value?cardView(AppRes.deleteMultiple, onDeleteMultipleTap):Container()
+        cardView(AppRes.forwardMultiple, onForwardMultipleTap!),
+        sender! ? divider : Container(),
+        sender! ? cardView(AppRes.delete, onDeleteTap!) : Container(),
+        sender! ? divider : Container(),
+        sender!
+            ? value!?cardView(AppRes.deleteMultiple, onDeleteMultipleTap!):Container()
             : Container(),
       ],
     );
@@ -78,9 +78,9 @@ class MessageDialog extends StatelessWidget {
 
 // ignore: must_be_immutable
 class GroupInfoDialog extends StatelessWidget {
-  final String title;
-  final String description;
-  final Function(String, String) doneTap;
+  final String ?title;
+  final String? description;
+  final Function(String, String)? doneTap;
 
   GroupInfoDialog(this.title, this.description, this.doneTap) {
     titleController = TextEditingController(text: title);
@@ -113,7 +113,7 @@ class GroupInfoDialog extends StatelessWidget {
                 hintText: AppRes.type_group_title_here,
               ),
               validator: (s) {
-                if (s.isEmpty) {
+                if (s!.isEmpty) {
                   return AppRes.can_not_be_empty;
                 } else {
                   return null;
@@ -132,9 +132,9 @@ class GroupInfoDialog extends StatelessWidget {
             verticalSpaceSmall,
             EvolveButton(
               onTap: () {
-                if (_formKey.currentState.validate()) {
+                if (_formKey.currentState!.validate()) {
                   Get.back();
-                  doneTap.call(
+                  doneTap!.call(
                     titleController.text.trim(),
                     descController.text.trim(),
                   );
