@@ -14,7 +14,7 @@ import '../Constants/Colors.dart';
 import '../Presentation/PagerState.dart';
 import 'HomePage.dart';
 import 'HostPage.dart';
-import 'ChatPage.dart';
+import 'RoomChatPage.dart';
 import 'MyGamesPage.dart';
 
 class BottomNavigationBarScreen extends StatefulWidget {
@@ -39,7 +39,7 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
       case 2:
         return new MyGamesPage();
       case 3:
-        return new ChatPage();
+        return new RoomChatPage();
       default:
         return HomePage();
     }

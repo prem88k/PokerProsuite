@@ -277,7 +277,7 @@ class _NotificationPageState extends State<NotificationPage> {
     };
     print("${id}, ${catId}, ${status}");
     Map<String, dynamic> body = {
-      'user_id': id.toString(),
+      'player_id': id.toString(),
       'game_id': catId.toString(),
       'status': status.toString()
     };
