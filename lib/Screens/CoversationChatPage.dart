@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../Constants/Api.dart';
@@ -26,12 +27,36 @@ class _CoversationChatPageState extends State<CoversationChatPage> {
   late GetMessageData getMessageData;
   List<MessageList>? messageList = [];
 
-
+  String code = '';
+  late Timer _timer;
   @override
   void initState() {
     // TODO: implement initState
-    FetchMessage(true);
+    _loadCounter();
     super.initState();
+    startTimer();
+  }
+
+  void startTimer() {
+    const Duration period = Duration(seconds: 3); // Change the duration as needed
+
+    _timer = Timer.periodic(period, (Timer timer) {
+      FetchMessage(true);// Call your API function
+    });
+  }
+
+  _loadCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      code = (prefs.getString('userId')) ?? "";
+      print(code);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel(); // Cancel the timer to avoid calling setState() after disposal
+    super.dispose();
   }
 
   @override
@@ -94,7 +119,7 @@ class _CoversationChatPageState extends State<CoversationChatPage> {
           ),
         ),
       ),
-      body: Stack(
+      body:  messageLoading ?Center(child: CircularProgressIndicator(backgroundColor: appColor,)):Stack(
         children: <Widget>[
           messageLoading ?Center(child: CircularProgressIndicator(backgroundColor: appColor,)): messageList!.length != 0
               ? ListView.builder(
@@ -102,12 +127,44 @@ class _CoversationChatPageState extends State<CoversationChatPage> {
             shrinkWrap: true,
             padding: EdgeInsets.only(top: 10, bottom: 10),
             itemBuilder: (context, index) {
-              return Container(
-                color: secondaryColor,
+              return messageList![index].senderId.toString() == code ?
+                Container(
+               // color: secondaryColor,
                 alignment: Alignment.topRight,
                 padding: EdgeInsets.only(
                     left: 16, right: 16, top: 10, bottom: 10),
                 child: Column(
+                  children: [
+                    Text(
+                      messageList![index].message!,
+                      style: TextStyle(
+                          fontFamily: 'railway',
+                          color: primaryColor,
+                          fontSize: size.height * 0.025,
+                          fontWeight: FontWeight.normal),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.005,
+                    ),
+                    Text(
+                      DateFormat("yyyy-MM-dd hh:mm:ss").format(
+                          DateTime.parse(messageList![index].createdAt!)),
+                      style: TextStyle(
+                          fontFamily: 'railway',
+                          color: primaryTextColor,
+                          fontSize: size.height * 0.012,
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ],
+                ),
+              ) :
+                Container(
+               // color: secondaryColor,
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.only(
+                    left: 16, right: 16, top: 10, bottom: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       messageList![index].message!,
@@ -270,7 +327,7 @@ class _CoversationChatPageState extends State<CoversationChatPage> {
     messageList!.clear();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
    /* setState(() {
-      messageLoading = loading;
+      messageLoading = true;
     });*/
 
     print(widget.gameId.toString());
@@ -302,6 +359,7 @@ class _CoversationChatPageState extends State<CoversationChatPage> {
     String responseBody = response.body;
     print("Message::$responseBody");
     if (statusCode == 200) {
+      if (mounted)
       if (getdata["success"]) {
         setState(() {
           messageLoading = false;

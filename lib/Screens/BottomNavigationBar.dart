@@ -12,6 +12,7 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import '../Constants/Colors.dart';
 import '../Presentation/PagerState.dart';
+import 'CalculatePage.dart';
 import 'HomePage.dart';
 import 'HostPage.dart';
 import 'RoomChatPage.dart';
@@ -40,6 +41,8 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
         return new MyGamesPage();
       case 3:
         return new RoomChatPage();
+      case 4:
+        return new CalculatePage();
       default:
         return HomePage();
     }
@@ -103,6 +106,15 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
                 fontSize: ScreenUtil().setHeight(13),
                 fontWeight: FontWeight.bold,
                 color:  currentIndex == 3?darkTextColor:borderColor)),
+            selectedColor:primaryColor,
+          ),
+          SalomonBottomBarItem(
+            icon: Icon(Icons.calculate,color: currentIndex == 4?appColor:borderColor,),
+            title: Text("Calculation",style:  TextStyle(
+                fontFamily: 'work',
+                fontSize: ScreenUtil().setHeight(13),
+                fontWeight: FontWeight.bold,
+                color:  currentIndex == 4?darkTextColor:borderColor)),
             selectedColor:primaryColor,
           ),
         ],

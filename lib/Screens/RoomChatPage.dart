@@ -46,7 +46,7 @@ class _RoomChatPageState extends State<RoomChatPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: isloading ?Center(child: CircularProgressIndicator(backgroundColor: appColor,)): SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.only(
             left: ScreenUtil().setWidth(10.0),
