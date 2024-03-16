@@ -2,6 +2,7 @@ import "package:amplitude_flutter/amplitude.dart";
 import "package:firebase_analytics/firebase_analytics.dart";
 import "package:flutter/widgets.dart";
 
+import "../Model/anonymous_user.dart";
 import "../Screens/services/analytics_service.dart";
 
 @immutable
@@ -18,7 +19,7 @@ class AmplitudeAnalyticsService implements AnalyticsService {
 
   void setUser(AnonymousUser? user) {
     _amplitudeAnalytics.setUserId(user?.id);
-    _firebaseAnalytics.setUserId(user?.id);
+    _firebaseAnalytics.setUserId(id: user?.id);
   }
 
   void logScreenChange({

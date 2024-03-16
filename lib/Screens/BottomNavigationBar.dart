@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:poker_income/Screens/main_route.dart';
+import 'package:poker_income/Screens/simulation_tab_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Constants/Api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +15,7 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import '../Constants/Colors.dart';
 import '../Presentation/PagerState.dart';
 import 'CalculatePage.dart';
+import 'CalculatorPage.dart';
 import 'HomePage.dart';
 import 'HostPage.dart';
 import 'RoomChatPage.dart';
@@ -42,7 +45,7 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
       case 3:
         return new RoomChatPage();
       case 4:
-        return new CalculatePage();
+        return  CalculatorPage();
       default:
         return HomePage();
     }

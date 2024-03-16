@@ -56,16 +56,16 @@ class _CalculatePageState extends State<CalculatePage> {
       child: Container(
         child: Column(
           children: [
-            Expanded(
+         /*   Expanded(
               child: AquaTabView(
                 views: [
                   SimulationTabPage(
                     key: ValueKey(0),
-                    calculationSession: calculationSession,
+                    calculationSession: _calculationSession!,
                   ),
                 ],
               ),
-            ),
+            ),*/
           ],
         ),
       ),
