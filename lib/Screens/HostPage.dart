@@ -67,7 +67,6 @@ class _HostPageState extends State<HostPage> {
   }
 
   FocusNode _focusNode = FocusNode();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -91,16 +90,14 @@ class _HostPageState extends State<HostPage> {
         child: Container(
           child: Column(
             children: [
-
               SizedBox(
                 height: ScreenUtil().setHeight(15),
               ),
-
               Padding(
                 padding: EdgeInsets.only(
                     left: 20.0, right: 20.0, top: 20.0, bottom: 10.0),
                 child: TextFormField(
-                  focusNode: _focusNode,
+                //  focusNode: _focusNode,
                   maxLines: 1,
                   keyboardType: TextInputType.text,
                   textAlignVertical: TextAlignVertical.center,
@@ -165,7 +162,7 @@ class _HostPageState extends State<HostPage> {
                   },
                   child: TextFormField(
                     readOnly: true,
-                    enabled:false,
+                    enabled: false,
                     keyboardType: TextInputType.datetime,
                     textAlignVertical: TextAlignVertical.center,
                     controller: dateInput,
@@ -276,23 +273,21 @@ class _HostPageState extends State<HostPage> {
                 ),
               ),
 
-              isloading
-                  ? Center(
-                child: CircularProgressIndicator(
-                  color: appColor,
-                ),
-              )
-                  :
               Padding(
                 padding: EdgeInsets.only(
                     left: 20.0, right: 20.0, top: 20.0, bottom: 10.0),
-                child: GestureDetector(
+                child: isloading
+                    ? Center(
+                  child: CircularProgressIndicator(
+                    color: appColor,
+                  ),
+                )
+                    : GestureDetector(
                     onTap: () {
                       addHostGameApi();
                     },
                     child: RoundedButton(text: "Host", press: () {})),
               )
-
             ],
           ),
         ),
@@ -315,9 +310,11 @@ class _HostPageState extends State<HostPage> {
   Future<void> getPlayersList() async {
     prefs = await SharedPreferences.getInstance();
     //print((int.parse(bidValueController.text)*100)/int.parse(contestPrice));
-    setState(() {
+
+  /*  setState(() {
       isloading = true;
-    });
+    });*/
+
     var uri = Uri.https(
       apiBaseUrl,
       '/api/allplayer',
@@ -353,8 +350,7 @@ class _HostPageState extends State<HostPage> {
             .map((player) => ValueItem(
           label: player.name ?? 'Default Label',
           value: player.id.toString() ?? 'Default Value',
-        ))
-            .toList();
+        )).toList();
 
         setState(() {
           isloading = false;
@@ -429,5 +425,4 @@ class _HostPageState extends State<HostPage> {
       }
     });
   }
-
 }

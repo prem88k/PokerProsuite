@@ -118,7 +118,16 @@ class _HomePageState extends State<HomePage> {
                 height: ScreenUtil().setHeight(30),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return AddSessionDetailsPage();
+                      },
+                    ),
+                  );
+                },
                 child: Container(
                   height: ScreenUtil().setHeight(50),
                   color: secondaryColor,

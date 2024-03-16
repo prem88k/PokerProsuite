@@ -54,7 +54,13 @@ class _NotificationPageState extends State<NotificationPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: isloading
+          ? Center(
+        child: CircularProgressIndicator(
+          color: appColor,
+        ),
+      )
+          : SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.only(
             left: ScreenUtil().setWidth(10.0),

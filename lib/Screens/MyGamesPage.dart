@@ -6,6 +6,7 @@ import '../Constants/Api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constants/Colors.dart';
+import 'GameUserPage.dart';
 
 class MyGamesPage extends StatefulWidget {
   const MyGamesPage({Key? key}) : super(key: key);
@@ -75,7 +76,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-              ): ListView.builder(
+              ) : ListView.builder(
                 itemCount: gamesList!.length,
                 primary: false,
                 physics: NeverScrollableScrollPhysics(),
@@ -92,85 +93,119 @@ class _MyGamesPageState extends State<MyGamesPage> {
   }
 
   Widget _buildServiceList(int i) {
-    return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: ScreenUtil().setHeight(10.0),
-            left: ScreenUtil().setWidth(8),
-            right: ScreenUtil().setWidth(8)),
-        child: Container(
-          width: ScreenUtil().screenWidth,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: ScreenUtil().setWidth(5),
-                  ),
-                  Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: ScreenUtil().setWidth(235),
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                  gamesList![i].address != null ?
-                                  gamesList![i].address.toString() : "ABC",
-                                  style: TextStyle(
-                                      fontSize: ScreenUtil().setWidth(15),
-                                      color: appColor,
-                                      fontFamily: 'poppins',
-                                      fontWeight: FontWeight.w600)),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: ScreenUtil().setHeight(5),
-                        ),
-                        Container(
-                          width: ScreenUtil().setWidth(235),
-                          child: Row(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return GameUserPage(gamesList![i].user);
+            },
+          ),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+        decoration: BoxDecoration(
+          color: secondaryColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: EdgeInsets.only(
+              top: ScreenUtil().setHeight(10.0),
+              left: ScreenUtil().setWidth(8),
+              right: ScreenUtil().setWidth(8)),
+          child: Container(
+            width: ScreenUtil().screenWidth,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: ScreenUtil().setWidth(5),
+                    ),
+                    Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
                                 width: ScreenUtil().setWidth(235),
                                 alignment: Alignment.topLeft,
                                 child: Text(
-                                    gamesList![i].time != null ?
-                                    "Time :-  ${gamesList![i].time.toString()}" : "ABC",
+                                    gamesList![i].address != null ?
+                                    gamesList![i].address.toString() : "ABC",
                                     style: TextStyle(
-                                        fontSize: ScreenUtil().setWidth(12),
+                                        fontSize: ScreenUtil().setWidth(15),
                                         color: appColor,
                                         fontFamily: 'poppins',
                                         fontWeight: FontWeight.w600)),
                               ),
                             ],
                           ),
-                        ),
-                        SizedBox(
-                          height: ScreenUtil().setHeight(10),
-                        ),
-                      ],
+                          SizedBox(
+                            height: ScreenUtil().setHeight(5),
+                          ),
+                          Container(
+                            width: ScreenUtil().setWidth(235),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: ScreenUtil().setWidth(235),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                      gamesList![i].time != null ?
+                                      "Time :-  ${gamesList![i].time.toString()}" : "ABC",
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setWidth(12),
+                                          color: primaryColor,
+                                          fontFamily: 'poppins',
+                                          fontWeight: FontWeight.w600)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: ScreenUtil().setHeight(5),
+                          ),
+                          Container(
+                            width: ScreenUtil().setWidth(235),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: ScreenUtil().setWidth(235),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                      gamesList![i].date != null ?
+                                      "Date :-  ${gamesList![i].date.toString()}" : "ABC",
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setWidth(12),
+                                          color: primaryColor,
+                                          fontFamily: 'poppins',
+                                          fontWeight: FontWeight.w600)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: ScreenUtil().setHeight(10),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -207,7 +242,7 @@ class _MyGamesPageState extends State<MyGamesPage> {
     if (statusCode == 200) {
       if (getdata["success"]) {
         getMyGamesData = GetMyGamesData.fromJson(jsonDecode(responseBody));
-        gamesList!.addAll(getMyGamesData.rides!);
+        gamesList!.addAll(getMyGamesData.host!);
         setState(() {
           isloading = false;
         });

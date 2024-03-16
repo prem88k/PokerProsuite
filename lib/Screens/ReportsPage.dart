@@ -16,7 +16,7 @@ class ReportsPage extends StatefulWidget {
 
 class _ReportsPageState extends State<ReportsPage> {
 
-  int? selectedIndex;
+  int? selectedIndex = 0;
   bool isloading = false;
   SharedPreferences ?prefs;
   late GetSessionReportData getSessionReportData;
@@ -187,7 +187,13 @@ class _ReportsPageState extends State<ReportsPage> {
               SizedBox(
                 height: ScreenUtil().setHeight(10),
               ),
-              Expanded(
+              isloading
+                  ? Center(
+                child: CircularProgressIndicator(
+                  color: appColor,
+                ),
+              )
+                  : Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                       children: <Widget>[
