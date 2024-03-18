@@ -42,7 +42,8 @@ class _NotificationPageState extends State<NotificationPage> {
       appBar: AppBar(
         bottomOpacity: 0,
         backgroundColor: secondaryColor,
-        elevation: 0,
+        iconTheme: IconThemeData(color: appColor),
+        elevation: 1,
         centerTitle: true,
         title: Text(
           "Notification",

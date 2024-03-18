@@ -173,6 +173,8 @@ class _LoginPageState extends State<LoginPage> {
                             child: TextFieldWidgetValidation(
                               controller: _passwordController,
                               title: "Password",
+                              isPassword: true,
+                              obs: true,
                               validator: (value) {
                                 if (_passwordController.text.isEmpty) {
                                   return 'This field is required';

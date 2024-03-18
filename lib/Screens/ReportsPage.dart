@@ -560,6 +560,59 @@ class _ReportsPageState extends State<ReportsPage> {
             ),
           ),
         ),
+        Padding(
+          padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+          child: GestureDetector(
+            onTap: () {
+
+            },
+            child: Container(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Text(
+                          'Winning',
+                          style: TextStyle(
+                            color: primaryColor,
+                            fontSize: ScreenUtil().setWidth(14),
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Text(
+                              "1500",
+                              style: TextStyle(
+                                color: primaryColor,
+                                fontSize: ScreenUtil().setWidth(14),
+                                fontFamily: 'poppins',
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: ScreenUtil().setWidth(5),),
+                          Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(height: ScreenUtil().setHeight(5),),
+                  Divider(
+                    thickness: 0.5,
+                    color: lightTextColor,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     ),
     );
@@ -765,6 +818,59 @@ class _ReportsPageState extends State<ReportsPage> {
                             Container(
                               child: Text(
                                 weeklyList![i].date.toString(),
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Winning',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text(
+                                "1500",
                                 style: TextStyle(
                                   color: primaryColor,
                                   fontSize: ScreenUtil().setWidth(14),
@@ -1018,6 +1124,59 @@ class _ReportsPageState extends State<ReportsPage> {
               ),
             ),
           ),
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Winning',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text(
+                                "1500",
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -1223,6 +1382,59 @@ class _ReportsPageState extends State<ReportsPage> {
                             Container(
                               child: Text(
                                 yearlyList![i].date.toString(),
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontSize: ScreenUtil().setWidth(14),
+                                  fontFamily: 'poppins',
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: ScreenUtil().setWidth(5),),
+                            Icon(Icons.arrow_forward_ios, color: primaryColor, size: ScreenUtil().setHeight(14),)
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(5),),
+                    Divider(
+                      thickness: 0.5,
+                      color: lightTextColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding:EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
+            child: GestureDetector(
+              onTap: () {
+
+              },
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Winning',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: ScreenUtil().setWidth(14),
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text(
+                                "1500",
                                 style: TextStyle(
                                   color: primaryColor,
                                   fontSize: ScreenUtil().setWidth(14),

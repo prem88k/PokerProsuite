@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:poker_income/Model/GetAddSessionData.dart';
 import 'package:poker_income/Presentation/common_button.dart';
 import 'package:poker_income/Screens/CompletedSessionPage.dart';
 import '../Constants/Colors.dart';
@@ -12,14 +14,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'BottomNavigationBar.dart';
 import 'Registration/view.dart';
 
-class AddSessionDetailsPage extends StatefulWidget {
-  const AddSessionDetailsPage({Key? key}) : super(key: key);
+class EditSessionDetailsPage extends StatefulWidget {
+  int? id;
+  SessionList sessionList;
+  EditSessionDetailsPage(this.id, this.sessionList);
 
   @override
-  State<AddSessionDetailsPage> createState() => _AddSessionDetailsPageState();
+  State<EditSessionDetailsPage> createState() => _EditSessionDetailsPageState();
 }
 
-class _AddSessionDetailsPageState extends State<AddSessionDetailsPage> {
+class _EditSessionDetailsPageState extends State<EditSessionDetailsPage> {
 
   TextEditingController buyInController = TextEditingController();
   TextEditingController tipsController = TextEditingController();
@@ -34,7 +38,10 @@ class _AddSessionDetailsPageState extends State<AddSessionDetailsPage> {
 
   @override
   void initState() {
-    dateInput.text = "";
+    dateInput.text = widget.sessionList.date.toString();
+    timeinput.text = widget.sessionList.time.toString();
+    cashedOutController.text = widget.sessionList.cashOut.toString();
+    buyInController.text = widget.sessionList.cashIn.toString();
     super.initState();
   }
 
@@ -50,7 +57,7 @@ class _AddSessionDetailsPageState extends State<AddSessionDetailsPage> {
         elevation: 1,
         centerTitle: true,
         title: Text(
-          "Add Session Details",
+          "Edit Session Details",
           style: TextStyle(
             color: appColor,
             fontSize: ScreenUtil().setWidth(18),
@@ -110,7 +117,7 @@ class _AddSessionDetailsPageState extends State<AddSessionDetailsPage> {
                 ),
               ),
 
-             /* SizedBox(
+              /*SizedBox(
                 height: ScreenUtil().setHeight(20),
               ),
 
@@ -315,9 +322,9 @@ class _AddSessionDetailsPageState extends State<AddSessionDetailsPage> {
               )
                   :
               GestureDetector(
-                onTap: () {
-                  addSessionApi();
-                },
+                  onTap: () {
+                    editSessionApi(widget.id);
+                  },
                   child: RoundedButton(text: "Submit", press: () {}))
 
             ],
@@ -339,14 +346,14 @@ class _AddSessionDetailsPageState extends State<AddSessionDetailsPage> {
     }
   }
 
-
-  Future<void> addSessionApi() async {
+  Future<void> editSessionApi(int? id) async {
     setState(() {
       isloading = true;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    final uri = Uri.parse('https://pokerprosuite.com/api/addsession');
+    var uri = buildSlotUrl(apiBaseUrl, id!);
+    print(uri);
+  //  final uri = Uri.parse('https://pokerprosuite.com/api/editsession');
     //  var url = Uri.http(uri, '/api/createUser');
     //- ---------------------------------------------------------
     var request = new http.MultipartRequest("POST", uri);
@@ -370,7 +377,7 @@ class _AddSessionDetailsPageState extends State<AddSessionDetailsPage> {
 
           FocusScope.of(context).requestFocus(FocusNode());
           if (getdata["success"]) {
-            Message(context, "Session Added successfully.");
+            Message(context, "Session Edit successfully.");
 
             Future.delayed(const Duration(milliseconds: 1000), () {
               setState(() {
@@ -397,6 +404,9 @@ class _AddSessionDetailsPageState extends State<AddSessionDetailsPage> {
       }
     });
   }
-
-
+  Uri buildSlotUrl(String baseUrl, int id) {
+    print("${id}");
+    return Uri.https(baseUrl, '/api/editsession',{'session_id':id.toString(),}
+    );
+  }
 }

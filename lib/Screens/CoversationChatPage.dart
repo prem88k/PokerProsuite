@@ -121,10 +121,13 @@ class _CoversationChatPageState extends State<CoversationChatPage> {
       ),
       body:  messageLoading ?Center(child: CircularProgressIndicator(backgroundColor: appColor,)):Stack(
         children: <Widget>[
-          messageLoading ?Center(child: CircularProgressIndicator(backgroundColor: appColor,)): messageList!.length != 0
+          messageLoading ?
+          Center(child: CircularProgressIndicator(backgroundColor: appColor,)): messageList!.length != 0
               ? ListView.builder(
             itemCount: messageList!.length,
             shrinkWrap: true,
+            primary: false,
+            scrollDirection: Axis.vertical,
             padding: EdgeInsets.only(top: 10, bottom: 10),
             itemBuilder: (context, index) {
               return messageList![index].senderId.toString() == code ?
@@ -134,20 +137,32 @@ class _CoversationChatPageState extends State<CoversationChatPage> {
                 padding: EdgeInsets.only(
                     left: 16, right: 16, top: 10, bottom: 10),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    Text(
+                      messageList![index].senderName!,
+                      style: TextStyle(
+                          fontFamily: 'railway',
+                          color: primaryColor,
+                          fontSize: size.height * 0.018,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.005,
+                    ),
                     Text(
                       messageList![index].message!,
                       style: TextStyle(
                           fontFamily: 'railway',
                           color: primaryColor,
-                          fontSize: size.height * 0.025,
+                          fontSize: size.height * 0.015,
                           fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
                       height: size.height * 0.005,
                     ),
                     Text(
-                      DateFormat("yyyy-MM-dd hh:mm:ss").format(
+                      DateFormat("dd-MM-yyyy").format(
                           DateTime.parse(messageList![index].createdAt!)),
                       style: TextStyle(
                           fontFamily: 'railway',
@@ -167,18 +182,29 @@ class _CoversationChatPageState extends State<CoversationChatPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
+                      messageList![index].senderName!,
+                      style: TextStyle(
+                          fontFamily: 'railway',
+                          color: primaryColor,
+                          fontSize: size.height * 0.018,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.005,
+                    ),
+                    Text(
                       messageList![index].message!,
                       style: TextStyle(
                           fontFamily: 'railway',
                           color: primaryColor,
-                          fontSize: size.height * 0.025,
+                          fontSize: size.height * 0.015,
                           fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
                       height: size.height * 0.005,
                     ),
                     Text(
-                      DateFormat("yyyy-MM-dd hh:mm:ss").format(
+                      DateFormat("dd-MM-yyyy").format(
                           DateTime.parse(messageList![index].createdAt!)),
                       style: TextStyle(
                           fontFamily: 'railway',

@@ -116,7 +116,9 @@ class _ForgotPasswordChangePageState extends State<ForgotPasswordChangePage> {
                             height: ScreenUtil().setHeight(75),
                             child: TextFieldWidgetValidation(
                               controller: _passwordController,
-                              title: "Password ",
+                              title: "Password",
+                              isPassword: true,
+                              obs: true,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Password is required';
@@ -139,7 +141,9 @@ class _ForgotPasswordChangePageState extends State<ForgotPasswordChangePage> {
                             height: ScreenUtil().setHeight(75),
                             child: TextFieldWidgetValidation(
                               controller: _cPasswordController,
-                              title: "Confirm Password ",
+                              title: "Confirm Password",
+                              isPassword: true,
+                              obs: true,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please confirm your password';

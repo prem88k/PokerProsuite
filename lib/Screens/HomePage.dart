@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:poker_income/HostGameScreen.dart';
 import 'package:poker_income/Screens/AddSessionDetailsPage.dart';
 import 'package:poker_income/Screens/CompletedSessionPage.dart';
 import 'package:poker_income/Screens/HostPage.dart';
@@ -63,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                   child: Icon(
                     Icons.person,
                     color: appColor,
-                    size: ScreenUtil().setHeight(20),
+                    size: ScreenUtil().setHeight(18),
                   ),
                 ),
               ),
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                   child: Icon(
                     Icons.notification_add,
                     color: appColor,
-                    size: ScreenUtil().setHeight(20),
+                    size: ScreenUtil().setHeight(18),
                   ),
                 ),
               ),
@@ -91,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   if (prefs != null || prefs != "null") {
                     prefs.setBool('isLogging', false);
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => LoginPage()),
                     );
@@ -102,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                   child: Icon(
                     Icons.logout,
                     color: appColor,
-                    size: ScreenUtil().setHeight(20),
+                    size: ScreenUtil().setHeight(18),
                   ),
                 ),
               ),
@@ -153,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return /*AddSessionDetailsPage*/CompletedSessionPage();
+                        return CompletedSessionPage();
                       },
                     ),
                   );
@@ -163,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                   color: secondaryColor,
                   child: Center(
                     child: Text(
-                      'Add a completed session',
+                      'A completed session',
                       style: TextStyle(
                         color: appColor,
                         fontSize: ScreenUtil().setWidth(14),
@@ -213,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return HostPage();
+                        return HostGameScreen();
                       },
                     ),
                   );

@@ -25,6 +25,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   TextEditingController oldController = TextEditingController();
   TextEditingController newController = TextEditingController();
   bool isloading = false;
+  bool obs = true;
+  bool isPassword = true;
 
   @override
   void initState() {
@@ -110,10 +112,24 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
               TextFormField(
                 maxLines: 1,
+                obscureText: obs,
                 keyboardType: TextInputType.text,
                 textAlignVertical: TextAlignVertical.center,
                 controller: oldController,
                 decoration: InputDecoration(
+                  suffixIcon:  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        obs = !obs;
+                      });
+                    },
+                    child: Icon(
+                      obs
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: lightTextColor,
+                    ),
+                  ),
                   contentPadding: EdgeInsets.only(
                       left: 20.0, top: 20.0, bottom: 20.0, right: 20.0),
                   isDense: false,
@@ -151,10 +167,24 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
               TextFormField(
                 maxLines: 1,
+                obscureText: isPassword,
                 keyboardType: TextInputType.text,
                 textAlignVertical: TextAlignVertical.center,
                 controller: newController,
                 decoration: InputDecoration(
+                  suffixIcon:  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isPassword = !isPassword;
+                      });
+                    },
+                    child: Icon(
+                      isPassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: lightTextColor,
+                    ),
+                  ),
                   contentPadding: EdgeInsets.only(
                       left: 20.0, top: 20.0, bottom: 20.0, right: 20.0),
                   isDense: false,

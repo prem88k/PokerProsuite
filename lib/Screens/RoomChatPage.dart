@@ -7,6 +7,9 @@ import '../Constants/Api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constants/Colors.dart';
+import 'Login/view.dart';
+import 'NotificationPage.dart';
+import 'ProfilePage.dart';
 
 class RoomChatPage extends StatefulWidget {
   const RoomChatPage({Key? key}) : super(key: key);
@@ -18,7 +21,7 @@ class RoomChatPage extends StatefulWidget {
 class _RoomChatPageState extends State<RoomChatPage> {
 
   bool isloading = false;
-  SharedPreferences ?prefs;
+  late SharedPreferences prefs;
   late GetRoomsData getRoomsData;
   List<RoomsList>? roomsList = [];
 
@@ -45,6 +48,71 @@ class _RoomChatPageState extends State<RoomChatPage> {
             fontWeight: FontWeight.w800,
           ),
         ),
+        actions: [
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return ProfilePage();
+                      },
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
+                  child: Icon(
+                    Icons.person,
+                    color: appColor,
+                    size: ScreenUtil().setHeight(18),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return NotificationPage();
+                      },
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
+                  child: Icon(
+                    Icons.notification_add,
+                    color: appColor,
+                    size: ScreenUtil().setHeight(18),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  if (prefs != null || prefs != "null") {
+                    prefs.setBool('isLogging', false);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  }
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
+                  child: Icon(
+                    Icons.logout,
+                    color: appColor,
+                    size: ScreenUtil().setHeight(18),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
       ),
       body: isloading ?Center(child: CircularProgressIndicator(backgroundColor: appColor,)): SingleChildScrollView(
         child: Container(

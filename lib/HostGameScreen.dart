@@ -11,25 +11,25 @@ import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import '../Presentation/common_button.dart';
-import 'BottomNavigationBar.dart';
-import 'Login/view.dart';
-import 'NotificationPage.dart';
-import 'ProfilePage.dart';
-import 'Registration/view.dart';
+import 'Screens/BottomNavigationBar.dart';
+import 'Screens/Registration/view.dart';
 
-class HostPage extends StatefulWidget {
-  const HostPage({Key? key}) : super(key: key);
+
+class HostGameScreen extends StatefulWidget {
+  const HostGameScreen({Key? key}) : super(key: key);
 
   @override
-  State<HostPage> createState() => _HostPageState();
+  State<HostGameScreen> createState() => _HostGameScreenState();
 }
 
-class _HostPageState extends State<HostPage> {
+class _HostGameScreenState extends State<HostGameScreen> {
 
   TextEditingController dateInput = TextEditingController();
   TextEditingController timeinput = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController selectedArea = TextEditingController();
+  SharedPreferences ?prefs;
+
 
   TimeOfDay timeOfDay = TimeOfDay.now();
   bool isloading = false;
@@ -47,7 +47,6 @@ class _HostPageState extends State<HostPage> {
   List<ValueItem> multiSelectOptions = [];
   List<int> selectedPlayerIds = [];
   String selectedGate = "";
-  late SharedPreferences prefs;
 
 
   @override
@@ -76,6 +75,7 @@ class _HostPageState extends State<HostPage> {
       appBar: AppBar(
         bottomOpacity: 0,
         backgroundColor: secondaryColor,
+        iconTheme: IconThemeData(color: appColor),
         elevation: 1,
         centerTitle: true,
         title: Text(
@@ -87,71 +87,6 @@ class _HostPageState extends State<HostPage> {
             fontWeight: FontWeight.w800,
           ),
         ),
-        actions: [
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return ProfilePage();
-                      },
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
-                  child: Icon(
-                    Icons.person,
-                    color: appColor,
-                    size: ScreenUtil().setHeight(18),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return NotificationPage();
-                      },
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
-                  child: Icon(
-                    Icons.notification_add,
-                    color: appColor,
-                    size: ScreenUtil().setHeight(18),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (prefs != null || prefs != "null") {
-                    prefs.setBool('isLogging', false);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
-                  child: Icon(
-                    Icons.logout,
-                    color: appColor,
-                    size: ScreenUtil().setHeight(18),
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -164,7 +99,7 @@ class _HostPageState extends State<HostPage> {
                 padding: EdgeInsets.only(
                     left: 20.0, right: 20.0, top: 20.0, bottom: 10.0),
                 child: TextFormField(
-                //  focusNode: _focusNode,
+                  //  focusNode: _focusNode,
                   maxLines: 1,
                   keyboardType: TextInputType.text,
                   textAlignVertical: TextAlignVertical.center,
@@ -378,7 +313,7 @@ class _HostPageState extends State<HostPage> {
     prefs = await SharedPreferences.getInstance();
     //print((int.parse(bidValueController.text)*100)/int.parse(contestPrice));
 
-  /*  setState(() {
+    /*  setState(() {
       isloading = true;
     });*/
 
@@ -493,3 +428,4 @@ class _HostPageState extends State<HostPage> {
     });
   }
 }
+
