@@ -22,6 +22,20 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    	<string>...</string>
+    	<key>NSLocationAlwaysUsageDescription</key>
+    	<string>Your location is required for xyz benefits for you</string>
+    	<key>NSLocationWhenInUseUsageDescription</key>
+    	<string>Your location is required for xyz benefits for you</string>
+    	<key>NSPhotoLibraryUsageDescription</key>
+    	<string>This app requires access to the photo library to upload your profile photo.</string>
+    	<key>FirebaseAppDelegateProxyEnabled</key><false/>
+            <key>UIBackgroundModes</key>
+            <array>
+                <string>fetch</string>
+                <string>remote-notification</string>
+            </array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>

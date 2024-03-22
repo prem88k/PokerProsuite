@@ -6,7 +6,7 @@ import "package:flutter/widgets.dart";
 
 @immutable
 class AquaScadffold extends StatelessWidget {
-  AquaScadffold({
+  const AquaScadffold({
     Key? key,
     this.scrollController,
     this.title = "Title",

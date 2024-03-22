@@ -30,215 +30,217 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        bottomOpacity: 0,
-        backgroundColor: secondaryColor,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          "Game",
-          style: TextStyle(
-            color: appColor,
-            fontSize: ScreenUtil().setWidth(18),
-            fontFamily: 'poppins',
-            fontWeight: FontWeight.w800,
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          bottomOpacity: 0,
+          backgroundColor: secondaryColor,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            "Game",
+            style: TextStyle(
+              color: appColor,
+              fontSize: ScreenUtil().setWidth(18),
+              fontFamily: 'poppins',
+              fontWeight: FontWeight.w800,
+            ),
           ),
-        ),
-        actions: [
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return ProfilePage();
-                      },
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
-                  child: Icon(
-                    Icons.person,
-                    color: appColor,
-                    size: ScreenUtil().setHeight(18),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return NotificationPage();
-                      },
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
-                  child: Icon(
-                    Icons.notification_add,
-                    color: appColor,
-                    size: ScreenUtil().setHeight(18),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (prefs != null || prefs != "null") {
-                    prefs.setBool('isLogging', false);
+          actions: [
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return ProfilePage();
+                        },
+                      ),
                     );
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
-                  child: Icon(
-                    Icons.logout,
-                    color: appColor,
-                    size: ScreenUtil().setHeight(18),
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
+                    child: Icon(
+                      Icons.person,
+                      color: appColor,
+                      size: ScreenUtil().setHeight(18),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: [
-              SizedBox(
-                height: ScreenUtil().setHeight(30),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return AddSessionDetailsPage();
-                      },
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return NotificationPage();
+                        },
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
+                    child: Icon(
+                      Icons.notification_add,
+                      color: appColor,
+                      size: ScreenUtil().setHeight(18),
                     ),
-                  );
-                },
-                child: Container(
-                  height: ScreenUtil().setHeight(50),
-                  color: secondaryColor,
-                  child: Center(
-                    child: Text(
-                      'Add a live session',
-                      style: TextStyle(
-                        color: appColor,
-                        fontSize: ScreenUtil().setWidth(14),
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w500,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    if (prefs != null || prefs != "null") {
+                      prefs.setBool('isLogging', false);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
+                    child: Icon(
+                      Icons.logout,
+                      color: appColor,
+                      size: ScreenUtil().setHeight(18),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: ScreenUtil().setHeight(30),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return AddSessionDetailsPage();
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: ScreenUtil().setHeight(50),
+                    color: secondaryColor,
+                    child: Center(
+                      child: Text(
+                        'Add a live session',
+                        style: TextStyle(
+                          color: appColor,
+                          fontSize: ScreenUtil().setWidth(14),
+                          fontFamily: 'poppins',
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(20),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return CompletedSessionPage();
-                      },
-                    ),
-                  );
-                },
-                child: Container(
-                  height: ScreenUtil().setHeight(50),
-                  color: secondaryColor,
-                  child: Center(
-                    child: Text(
-                      'A completed session',
-                      style: TextStyle(
-                        color: appColor,
-                        fontSize: ScreenUtil().setWidth(14),
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w500,
+                SizedBox(
+                  height: ScreenUtil().setHeight(20),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return CompletedSessionPage();
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: ScreenUtil().setHeight(50),
+                    color: secondaryColor,
+                    child: Center(
+                      child: Text(
+                        'A completed session',
+                        style: TextStyle(
+                          color: appColor,
+                          fontSize: ScreenUtil().setWidth(14),
+                          fontFamily: 'poppins',
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(20),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return ReportsPage();
-                      },
-                    ),
-                  );
-                },
-                child: Container(
-                  height: ScreenUtil().setHeight(50),
-                  color: secondaryColor,
-                  child: Center(
-                    child: Text(
-                      'Reports',
-                      style: TextStyle(
-                        color: appColor,
-                        fontSize: ScreenUtil().setWidth(14),
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w500,
+                SizedBox(
+                  height: ScreenUtil().setHeight(20),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return ReportsPage();
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: ScreenUtil().setHeight(50),
+                    color: secondaryColor,
+                    child: Center(
+                      child: Text(
+                        'Reports',
+                        style: TextStyle(
+                          color: appColor,
+                          fontSize: ScreenUtil().setWidth(14),
+                          fontFamily: 'poppins',
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(20),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return HostGameScreen();
-                      },
-                    ),
-                  );
-                },
-                child: Container(
-                  height: ScreenUtil().setHeight(50),
-                  color: secondaryColor,
-                  child: Center(
-                    child: Text(
-                      'Host Game',
-                      style: TextStyle(
-                        color: appColor,
-                        fontSize: ScreenUtil().setWidth(14),
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w500,
+                SizedBox(
+                  height: ScreenUtil().setHeight(20),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return HostGameScreen();
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: ScreenUtil().setHeight(50),
+                    color: secondaryColor,
+                    child: Center(
+                      child: Text(
+                        'Host Game',
+                        style: TextStyle(
+                          color: appColor,
+                          fontSize: ScreenUtil().setWidth(14),
+                          fontFamily: 'poppins',
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(30),
-              ),
-            ],
+                SizedBox(
+                  height: ScreenUtil().setHeight(30),
+                ),
+              ],
+            ),
           ),
         ),
       ),

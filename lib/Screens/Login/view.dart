@@ -37,8 +37,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    _emailController.text = "8866482755";
-    _passwordController.text = "Falak@123";
+   /* _emailController.text = "8866482755";
+    _passwordController.text = "Falak@123";*/
     getToken();
     // TODO: implement initState
     super.initState();
@@ -292,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: ScreenUtil().setHeight(15),
                     ),
-                    GestureDetector(
+                   /* GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -317,7 +317,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                    ),
+                    ),*/
                   ],
                 ),
               ),

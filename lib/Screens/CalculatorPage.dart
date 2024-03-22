@@ -1,15 +1,27 @@
 
 import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
 import "package:poker_income/Screens/simulation_tab_page.dart";
 import "package:poker_income/Screens/view_models/simulation_session.dart";
 
 import "../preferences_tab_page.dart";
+import "HomePage.dart";
+import "HostPage.dart";
+import "MyGamesPage.dart";
+import "RoomChatPage.dart";
 import "common_widgets/analytics.dart";
 import "common_widgets/aqua_icons.dart";
 import "common_widgets/aqua_tab_bar.dart";
 import "common_widgets/aqua_tab_view.dart";
 
-
+class MainRoute extends MaterialPageRoute {
+  MainRoute({
+    RouteSettings? settings,
+  }) : super(
+    builder: (context) => CalculatorPage(),
+    settings: settings,
+  );
+}
 class CalculatorPage extends StatefulWidget {
   @override
   State<CalculatorPage> createState() => _CalculatorPageState();
@@ -60,6 +72,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
     return ValueListenableBuilder<CalculationSession>(
       valueListenable: _calculationSession,
       builder: (context, calculationSession, _) => Container(
+        height: 500,
         color: Color(0xffffffff),
         child: Column(
           children: [
@@ -70,7 +83,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     key: ValueKey(0),
                     calculationSession: calculationSession,
                   ),
-                  PreferencesTabPage(key: ValueKey(1)),
+                  HomePage(),
+                  HostPage(),
+                  MyGamesPage(),
+                  RoomChatPage(),
                 ],
                 activeViewIndex: _activeTabViewIndex,
               ),
@@ -84,7 +100,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
               },
               items: [
                 AquaTabBarItem(label: "Calculation", icon: AquaIcons.percent),
-                AquaTabBarItem(label: "Preferences", icon: AquaIcons.gear),
+                AquaTabBarItem(label: "Home", icon: AquaIcons.gear),
+                AquaTabBarItem(label: "Host", icon: AquaIcons.gear),
+                AquaTabBarItem(label: "My games", icon: AquaIcons.gear),
+                AquaTabBarItem(label: "Chat", icon: AquaIcons.gear),
+
               ],
             ),
           ],

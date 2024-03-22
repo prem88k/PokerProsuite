@@ -46,17 +46,16 @@ class _SimulationTabPageState extends State<SimulationTabPage> {
     _needsBottomPaddingForOverscroll = false;
     _isCommunityCardPopupOpen = false;
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+   /* WidgetsBinding.instance.addPostFrameCallback((_) {
       Analytics.of(context).logScreenChange(
         screenName: "Simulation Screen",
       );
-    });
+    });*/
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     final theme = AquaTheme.of(context);
 
     setSystemUIOverlayStyle(

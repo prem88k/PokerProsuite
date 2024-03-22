@@ -19,7 +19,7 @@ class _PreferencesTabPageState extends State<PreferencesTabPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       Analytics.of(context).logScreenChange(
         screenName: "Preferences Screen",
       );

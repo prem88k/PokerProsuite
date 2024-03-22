@@ -1,87 +1,71 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:poker_income/Screens/BottomNavigationBar.dart';
-import 'package:poker_income/Screens/Login/view.dart';
-import 'Screens/Splashscreen/view.dart';
+import "dart:async";
+import "package:amplitude_flutter/amplitude.dart";
+import "package:flutter/material.dart";
+
+import "package:firebase_analytics/firebase_analytics.dart";
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import "package:flutter/foundation.dart";
+import "package:poker_income/service/amplitude_analytics_service.dart";
+import "package:poker_income/service/firebase_auth_manager_service.dart";
+import "package:poker_income/service/noop_error_reporter_service.dart";
+import "package:poker_income/service/sentry_error_reporter_service.dart";
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
-}
+import "Screens/BottomNavigationBar.dart";
+import "Screens/common_widgets/aqua_preferences.dart";
+import "Screens/services/app.dart";
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'high_importance_channel', // id
-  'High Importance Notifications', // title// description
-  importance: Importance.high,
-);
-
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
+  final authManagerService = FirebaseAuthManagerService();
+  final amplitudeInstance = Amplitude.getInstance();
+  final analyticsService = AmplitudeAnalyticsService(
+    amplitudeAnalytics: amplitudeInstance,
+    firebaseAnalytics: FirebaseAnalytics.instance,
   );
-  runApp(const MyApp());
-}
+  final applicationPreferenceData = AquaPreferenceData();
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  Future<void> initState() async {
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
-
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
-  }
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (ctx, userSnapshot) {
-          if (userSnapshot.connectionState == ConnectionState.waiting) {
-            // Loading state, display a loading indicator
-            return CircularProgressIndicator();
-          } else if (userSnapshot.hasData && userSnapshot.data != null) {
-            // User is authenticated, show the main content
-            return BottomNavigationBarScreen();
-          } else {
-            // User is not authenticated, show the login or signup screen
-            return LoginPage();
-          }
-        },
-     /* builder: (ctx, userSnapshot) {
-        if (userSnapshot.hasData) {
-          return BottomNavigationBarScreen();
-        } else if (userSnapshot.hasError) {
-          return CircularProgressIndicator();
-        }
-        return SplashScreen();
-      },*/
-    ),
+  if (!kDebugMode) {
+    final errorReporter = SentryErrorReporterService(
+      sentryDsn:
+      "https://7f698d26a29e495881c4adf639830a1a@o30395.ingest.sentry.io/5375048",
     );
+    FlutterError.onError = (details) {
+      errorReporter.captureFlutterException(details);
+    };
+
+    runZonedGuarded(() async {
+      runApp(MaterialApp(
+        home: AquaApp(
+          analyticsService: analyticsService,
+          authManagerService: authManagerService,
+          errorReporter: errorReporter,
+          applicationPreferenceData: applicationPreferenceData,
+          prepare: () async {
+            await Firebase.initializeApp();
+            await authManagerService.initialize();
+            await amplitudeInstance.init("94ba98446847f79253029f7f8e6d9cf3");
+            await amplitudeInstance
+                .setUserProperties({"Environment": "production"});
+            await amplitudeInstance.trackingSessionEvents(true);
+            await applicationPreferenceData.initialize();
+          },
+        ),
+      ));
+    }, (exception, stackTrace) async {
+      errorReporter.captureException(
+        exception: exception,
+        stackTrace: stackTrace,
+      );
+    });
+  } else {
+    runApp( MaterialApp(
+      home: AquaApp(
+        analyticsService: analyticsService,
+        authManagerService: authManagerService,
+        errorReporter: NoopErrorReporterService(),
+        applicationPreferenceData: applicationPreferenceData,
+      ),
+    ));
   }
-}
-class Firestore {
-  static var instance;
 }

@@ -27,6 +27,7 @@ class AquaTheme extends InheritedWidget {
 
   static AquaThemeData of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<AquaTheme>()!.data;
+
 }
 
 @immutable
